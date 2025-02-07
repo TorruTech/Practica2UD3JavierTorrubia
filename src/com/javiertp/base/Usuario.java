@@ -101,4 +101,9 @@ public class Usuario {
     public void setInscripciones(List<Inscripcion> inscripciones) {
         this.inscripciones = inscripciones;
     }
+
+    @Override
+    public String toString() {
+        return nombre + " " + apellidos + " " + email + " " + fechaRegistro;
+    }
 }

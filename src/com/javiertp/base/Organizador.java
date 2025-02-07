@@ -103,4 +103,9 @@ public class Organizador {
     public void setEventos(List<Evento> eventos) {
         this.eventos = eventos;
     }
+
+    @Override
+    public String toString() {
+        return nombre + " " + apellidos + " " + telefono + " " + email;
+    }
 }

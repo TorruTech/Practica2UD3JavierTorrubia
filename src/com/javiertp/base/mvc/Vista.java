@@ -83,9 +83,9 @@ public class Vista {
     JMenuItem salirItem;
 
     public Vista() {
-        frame = new JFrame("Vista");
+        frame = new JFrame("App de gestión de eventos");
         frame.setContentPane(panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);

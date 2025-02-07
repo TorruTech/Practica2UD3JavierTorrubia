@@ -13,8 +13,20 @@ public class Evento {
     private String ubicacion;
     private Date fechaInicio;
     private float precio;
-    private List<Inscripcion> inscripciones;
     private Organizador organizador;
+    private List<Inscripcion> inscripciones;
+
+    public Evento() {
+
+    }
+
+    public Evento(String nombre, String ubicacion, Date fechaInicio, float precio, Organizador organizador) {
+        this.nombre = nombre;
+        this.ubicacion = ubicacion;
+        this.fechaInicio = fechaInicio;
+        this.precio = precio;
+        this.organizador = organizador;
+    }
 
     @Id
     @Column(name = "id")
@@ -100,5 +112,10 @@ public class Evento {
 
     public void setOrganizador(Organizador organizador) {
         this.organizador = organizador;
+    }
+
+    @Override
+    public String toString() {
+        return nombre + " " + ubicacion + " " + fechaInicio + " " + precio + " " + organizador.getNombre();
     }
 }

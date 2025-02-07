@@ -4,8 +4,12 @@ import com.javiertp.base.Evento;
 import com.javiertp.base.Usuario;
 import com.javiertp.base.Organizador;
 import com.javiertp.base.Inscripcion;
+import com.javiertp.base.util.Util;
+
 import java.awt.event.*;
 import java.sql.Date;
+import java.util.List;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -22,7 +26,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         addActionListener(this);
         addListSelectionListener(this);
         addWindowListener(this);
-        
+
         refrescarSeccionEventos();
         refrescarSeccionUsuarios();
         refrescarSeccionOrganizadores();
@@ -32,6 +36,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
     // Método para agregar los ActionListener
     private void addActionListener(ActionListener listener){
         vista.nuevoEventoBtn.addActionListener(listener);
+        vista.nuevoEventoBtn.setActionCommand("NuevoEvento");
         vista.eliminarEventoBtn.addActionListener(listener);
         vista.nuevoUsuarioBtn.addActionListener(listener);
         vista.nuevoUsuarioBtn.setActionCommand("NuevoUsuario");
@@ -72,6 +77,10 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         switch(comando) {
             // Sección de Eventos
             case "NuevoEvento":
+                Evento eventoAInsertar = new Evento(vista.nombreEventoTxt.getText(), String.valueOf(vista.eventoComboBox.getSelectedItem()),
+                        Date.valueOf(vista.eventoDPicker.getDate()), Float.parseFloat(vista.precioEventoTxt.getText()),
+                        (Organizador) vista.organizadorComboBox.getSelectedItem());
+                modelo.guardarEvento(eventoAInsertar);
                 break;
 
             case "EliminarEvento":
@@ -120,9 +129,11 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                 modelo.conectar();
                 break;
             case "Salir":
-                modelo.desconectar();
-                System.exit(0);
-                break;
+                int resp = Util.showConfirmDialog("¿Desea salir de la aplicación?", "Salir");
+                if (resp == JOptionPane.OK_OPTION) {
+                    System.exit(0);
+                }
+                return;
             default:
                 break;
         }
@@ -130,6 +141,30 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         refrescarSeccionEventos();
         refrescarSeccionOrganizadores();
         refrescarSeccionInscripciones();
+    }
+
+    private void listarUsuarios(){
+        List<Usuario> usuarios = modelo.obtenerUsuarios();
+        vista.dlmUsuarios.clear();
+        for(Usuario usuario : usuarios){
+            vista.dlmUsuarios.addElement(usuario);
+        }
+    }
+
+    private void listarEventos(){
+        List<Evento> eventos = modelo.obtenerEventos();
+        vista.dlmEventos.clear();
+        for(Evento evento : eventos){
+            vista.dlmEventos.addElement(evento);
+        }
+    }
+
+    private void listarOrganizadores(){
+        List<Organizador> organizadores = modelo.obtenerOrganizadores();
+        vista.dlmOrganizadores.clear();
+        for(Organizador organizador : organizadores){
+            vista.dlmOrganizadores.addElement(organizador);
+        }
     }
 
     // Métodos para refrescar la vista con datos actualizados (según el modelo)
@@ -142,6 +177,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         vista.apellidosUsuarioTxt.setText("");
         vista.emailUsuarioTxt.setText("");
         vista.usuarioDPicker.setText("");
+        listarUsuarios();
     }
 
     private void refrescarSeccionOrganizadores() {
@@ -158,8 +194,11 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
 
     @Override
     public void windowClosing(WindowEvent windowEvent) {
-        // Guardar datos o realizar acciones antes de cerrar la ventana
-        modelo.desconectar();
+        int resp = Util.showConfirmDialog("¿Desea salir de la aplicación?", "Salir");
+        if (resp == JOptionPane.OK_OPTION) {
+            modelo.desconectar();
+            System.exit(0);
+        }
     }
 
     @Override

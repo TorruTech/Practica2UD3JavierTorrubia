@@ -50,8 +50,12 @@ public class HibernateUtil {
   public static Session getCurrentSession() {
 	
     if ((session == null) || (!session.isOpen()))
-      openSession();
-			
+      try {
+        openSession();
+      } catch (NullPointerException e) {
+        System.out.println("No estás conectado a la BBDD");
+      }
+
     return session;
   }
 	
