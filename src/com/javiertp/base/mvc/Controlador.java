@@ -1,15 +1,13 @@
 package com.javiertp.base.mvc;
 
-import com.elenajif.colegio.base.Alumno;
-import com.elenajif.colegio.base.Asignatura;
-import com.elenajif.colegio.base.Profesor;
-
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import com.javiertp.base.Evento;
+import com.javiertp.base.Usuario;
+import com.javiertp.base.Organizador;
+import com.javiertp.base.Inscripcion;
 import java.awt.event.*;
 import java.sql.Date;
-import java.util.List;
-import java.util.Set;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class Controlador extends WindowAdapter implements ActionListener, ListSelectionListener {
 
@@ -22,37 +20,44 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         this.modelo = modelo;
 
         addActionListener(this);
-        addListSelecctionListener(this);
+        addListSelectionListener(this);
         addWindowListener(this);
 
         modelo.conectar();
 
-        refrescarSeccionProfesores();
-        refrescarSeccionAsignaturas();
-        refrescarSeccionAlumnos();
+        refrescarSeccionEventos();
+        refrescarSeccionUsuarios();
+        refrescarSeccionOrganizadores();
+        refrescarSeccionInscripciones();
     }
 
+    // Método para agregar los ActionListener
     private void addActionListener(ActionListener listener){
-        vista.desmatricularAlumnoBtn.addActionListener(listener);
-        vista.desmatricularDeAsignaturaBtn.addActionListener(listener);
-        vista.eliminarAlumnoBtn.addActionListener(listener);
-        vista.eliminarAsignaturaBtn.addActionListener(listener);
-        vista.matricularAlumnoBtn.addActionListener(listener);
-        vista.matricularEnAsignaturaBtn.addActionListener(listener);
-        vista.nuevoAlumnoBtn.addActionListener(listener);
-        vista.nuevoAsignaturaBtn.addActionListener(listener);
-        vista.nuevoProfesorBtn.addActionListener(listener);
-        vista.eliminarProfesorBtn.addActionListener(listener);
-        vista.asignarAsignaturaProfesorBtn.addActionListener(listener);
-        vista.desvincularAsignaturaProfesorBtn.addActionListener(listener);
+        vista.nuevoEventoBtn.addActionListener(listener);
+        vista.eliminarEventoBtn.addActionListener(listener);
+        vista.nuevoUsuarioBtn.addActionListener(listener);
+        vista.eliminarUsuarioBtn.addActionListener(listener);
+        vista.nuevoOrganizadorBtn.addActionListener(listener);
+        vista.nuevaInscripcionBtn.addActionListener(listener);
+        vista.eliminarInscripcionBtn.addActionListener(listener);
+        vista.eliminarOrganizadorBtn.addActionListener(listener);
+        vista.desinscribirUsuarioBtn.addActionListener(listener);
+        vista.desvincularEventoOrganizadorBtn.addActionListener(listener);
+        vista.desinscribirseBtn.addActionListener(listener);
+        vista.inscribirEnEventoBtn.addActionListener(listener);
+        vista.inscribirUsuarioEventoBtn.addActionListener(listener);
+        vista.asignarEventoOrganizadorBtn.addActionListener(listener);
     }
 
-    private void addListSelecctionListener(ListSelectionListener listener){
-        vista.listAlumnos.addListSelectionListener(listener);
-        vista.listAsignaturas.addListSelectionListener(listener);
-        vista.listProfesores.addListSelectionListener(listener);
+    // Método para agregar los ListSelectionListener
+    private void addListSelectionListener(ListSelectionListener listener){
+        vista.listEventos.addListSelectionListener(listener);
+        vista.listUsuarios.addListSelectionListener(listener);
+        vista.listOrganizadores.addListSelectionListener(listener);
+        vista.listInscripciones.addListSelectionListener(listener);
     }
 
+    // Método para agregar el WindowListener
     private void addWindowListener(WindowListener listener){
         vista.frame.addWindowListener(listener);
     }
@@ -61,242 +66,77 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
     public void actionPerformed(ActionEvent actionEvent) {
         String comando = actionEvent.getActionCommand();
 
-        switch(comando){
-            //Seccion alumnos
-            case "DesmatricularAlumno":{
-                Alumno alumno = vista.listAlumnos.getSelectedValue();
-                alumno.desmatricularDeAsignaturas(vista.listAsignaturasAlumno.getSelectedValuesList());
-                modelo.guardarAlumno(alumno);
-            }
-            break;
+        switch(comando) {
+            // Sección de Eventos
+            case "NuevoEvento":
+                break;
 
-            case "MatricularAlumno":{
-                Alumno alumno = vista.listAlumnos.getSelectedValue();
-                alumno.matricularEnAsignaturas(vista.listAsignaturasDisponiblesAlumno.getSelectedValuesList());
-                modelo.guardarAlumno(alumno);
-            }
-            break;
+            case "EliminarEvento":
+                // Eliminar el evento seleccionado
+                Evento eventoEliminar = vista.listEventos.getSelectedValue();
+                modelo.eliminarEvento(eventoEliminar);
+                break;
 
-            case "NuevoAlumno":{
-                Alumno alumno = new Alumno(vista.nombreAlumnoTxt.getText(), vista.apellidosAlumnoTxt.getText(), Date.valueOf(vista.alumnoDPicker.getDate()));
-                modelo.guardarAlumno(alumno);
-            }
-            break;
+            // Sección de Usuarios
+            case "NuevoUsuario":
+                break;
 
-            case "EliminarAlumno":{
-                Alumno alumno = vista.listAlumnos.getSelectedValue();
-                modelo.eliminarAlumno(alumno);
-            }
-            break;
+            case "EliminarUsuario":
+                // Eliminar el usuario seleccionado
+                Usuario usuarioEliminar = vista.listUsuarios.getSelectedValue();
+                modelo.eliminarUsuario(usuarioEliminar);
+                break;
 
-            //Seccion Asignaturas
-            case "MatricularAsignatura":{
-                Asignatura asignatura = vista.listAsignaturas.getSelectedValue();
-                asignatura.matricularAlumnos(vista.listAlumnosDisponiblesAsignatura.getSelectedValuesList());
-                modelo.guardarAsignatura(asignatura);
-            }
-            break;
+            // Sección de Organizadores
+            case "NuevoOrganizador":
+                break;
 
-            case "DesmatricularAsignatura":{
-                Asignatura asignatura = vista.listAsignaturas.getSelectedValue();
-                asignatura.desmatricularAlumnos(vista.listAlumnosAsignatura.getSelectedValuesList());
-                modelo.guardarAsignatura(asignatura);
-            }
-            break;
+            case "EliminarOrganizador":
+                // Eliminar el organizador seleccionado
+                Organizador organizadorEliminar = vista.listOrganizadores.getSelectedValue();
+                modelo.eliminarOrganizador(organizadorEliminar);
+                break;
 
-            case "NuevaAsignatura":{
-                Asignatura asignatura = new Asignatura(vista.nombreAsignaturaTxt.getText(), (String)vista.departamentoCB.getSelectedItem(), (Integer) vista.horasSpinner.getValue(), (Profesor)vista.profesorCB.getSelectedItem());
-                modelo.guardarAsignatura(asignatura);
-            }
-            break;
+            // Sección de Inscripciones
+            case "InscribirUsuario":
+                break;
 
-            case "EliminarAsignatura":{
-                Asignatura asignatura = vista.listAsignaturas.getSelectedValue();
-                //Al ser la entidad Padre de la relacion alumno-asignatura, debo eliminar las relaciones primero
-                asignatura.desmatricularTodos();
-                modelo.eliminarAsignatura(asignatura);
-            }
-            break;
+            case "DeshacerInscripcion":
+                // Deshacer la inscripción de un usuario en un evento
+                Inscripcion inscripcionEliminar = vista.listInscripciones.getSelectedValue();
+                modelo.eliminarInscripcion(inscripcionEliminar);
+                break;
 
-
-            //Seccion Profesores
-            case "AsignarAsignatura":{
-                Profesor profesor = vista.listProfesores.getSelectedValue();
-                profesor.anadirAsignaturas(vista.listAsignaturasDisponiblesProfesor.getSelectedValuesList());
-                modelo.guardarProfesor(profesor);
-            }
-            break;
-
-            case "DesvincularAsignatura": {
-                Profesor profesor = vista.listProfesores.getSelectedValue();
-                profesor.desvincularAsignaturas(vista.listAsignaturasProfesor.getSelectedValuesList());
-                modelo.guardarProfesor(profesor);
-            }
-            break;
-
-            case "NuevoProfesor":{
-                Profesor profesor = new Profesor(vista.nombreProfesorTxt.getText(), vista.dniProfesorTxt.getText());
-                modelo.guardarProfesor(profesor);
-            }
-            break;
-
-            case "EliminarProfesor":{
-                Profesor profesor = vista.listProfesores.getSelectedValue();
-                //Al ser la entidad Padre, si no quiero eliminar asignaturas debo quitar las relaciones primero
-                profesor.desvincularTodas();
-                modelo.eliminarProfesor(profesor);
-            }
-            break;
-        }
-        refrescarSeccionAlumnos();
-        refrescarSeccionAsignaturas();
-        refrescarSeccionProfesores();
-    }
-
-    @Override
-    public void valueChanged(ListSelectionEvent listSelectionEvent) {
-        if(listSelectionEvent.getSource() == vista.listAsignaturas && vista.listAsignaturas.getSelectedValue() != null){
-            Asignatura asignatura = vista.listAsignaturas.getSelectedValue();
-            listarAlumnosAsignatura(asignatura);
-            listarAlumnosDisponiblesParaAsignatura(asignatura);
-        }else if(listSelectionEvent.getSource() == vista.listAlumnos && vista.listAlumnos.getSelectedValue() != null){
-            Alumno alumno = vista.listAlumnos.getSelectedValue();
-            listarAsignaturasAlumno(alumno);
-            listarAsignaturasDisponiblesParaAlumno(alumno);
-        }else if(listSelectionEvent.getSource() == vista.listProfesores && vista.listProfesores.getSelectedValue() != null){
-            Profesor profesor = vista.listProfesores.getSelectedValue();
-            listarAsignaturasProfesor(profesor);
-            listarAsignaturasDisponiblesProfesor(profesor);
-        }
-
-    }
-
-
-    /*
-        Pestana Alumnos
-     */
-
-    private void listarAlumnos(){
-        List<Alumno> alumnos = modelo.obtenerAlumnos();
-        vista.dlmAlumnos.clear();
-        for(Alumno alumno : alumnos){
-            vista.dlmAlumnos.addElement(alumno);
+            default:
+                break;
         }
     }
 
-    private void listarAsignaturasDisponiblesParaAlumno(Alumno alumno){
-        List<Asignatura> asignaturas = modelo.obtenerAsignaturasDisponiblesParaAlumno(alumno);
-        vista.dlmAsignaturasDisponiblesAlumno.clear();
-        for(Asignatura asignatura : asignaturas){
-            vista.dlmAsignaturasDisponiblesAlumno.addElement(asignatura);
-        }
+    // Métodos para refrescar la vista con datos actualizados (según el modelo)
+    private void refrescarSeccionEventos() {
+
     }
 
-    private void listarAsignaturasAlumno(Alumno alumno){
-        Set<Asignatura> asignaturas = alumno.getAsignaturas();
-        vista.dlmAsignaturasAlumno.clear();
-        for(Asignatura asignatura : asignaturas){
-            vista.dlmAsignaturasAlumno.addElement(asignatura);
-        }
+    private void refrescarSeccionUsuarios() {
+
     }
 
-    public void refrescarSeccionAlumnos(){
-        vista.nombreAlumnoTxt.setText("");
-        vista.apellidosAlumnoTxt.setText("");
-        vista.alumnoDPicker.setText("");
-        vista.dlmAsignaturasDisponiblesAlumno.clear();
-        vista.dlmAsignaturasAlumno.clear();
-        listarAlumnos();
+    private void refrescarSeccionOrganizadores() {
+
     }
 
-    /*
-        Pestana Asignaturas
-     */
+    private void refrescarSeccionInscripciones() {
 
-    private void listarAsignaturas(){
-        List<Asignatura> asignaturas = modelo.obtenerAsignaturas();
-        vista.dlmAsignaturas.clear();
-        for(Asignatura asignatura : asignaturas){
-            vista.dlmAsignaturas.addElement(asignatura);
-        }
     }
-
-    private void listarAlumnosAsignatura(Asignatura asignatura){
-        Set<Alumno> alumnos = asignatura.getAlumnos();
-        vista.dlmAlumnosAsignatura.clear();
-        for(Alumno alumno : alumnos){
-            vista.dlmAlumnosAsignatura.addElement(alumno);
-        }
-    }
-
-    private void listarAlumnosDisponiblesParaAsignatura(Asignatura asignatura){
-        List<Alumno> alumnos = modelo.obtenerAlumnosDisponiblesParaAsignatura(asignatura);
-        vista.dlmAlumnosDisponiblesAsignatura.clear();
-        for(Alumno alumno : alumnos){
-            vista.dlmAlumnosDisponiblesAsignatura.addElement(alumno);
-        }
-    }
-
-    public void listarProfesoresAsignatura(){
-        List<Profesor> profesores = modelo.obtenerProfesores();
-        vista.dcbProfesorAsignatura.removeAllElements();
-        for(Profesor profesor : profesores){
-            vista.dcbProfesorAsignatura.addElement(profesor);
-        }
-    }
-
-    public void refrescarSeccionAsignaturas(){
-        vista.nombreAsignaturaTxt.setText("");
-        vista.horasSpinner.setValue(0);
-        vista.dlmAlumnosAsignatura.clear();
-        vista.dlmAlumnosDisponiblesAsignatura.clear();
-        listarAsignaturas();
-        listarProfesoresAsignatura();
-    }
-
-    /*
-        Pestana Profesores
-     */
-    public void listarProfesores(){
-        List<Profesor> lista = modelo.obtenerProfesores();
-        vista.dlmProfesores.clear();
-        for(Profesor profesor : lista){
-            vista.dlmProfesores.addElement(profesor);
-        }
-    }
-
-    public void listarAsignaturasProfesor(Profesor profesor){
-        List<Asignatura> asignaturas = profesor.getAsignaturas();
-        vista.dlmAsignaturasProfesor.clear();
-        for(Asignatura asignatura : asignaturas){
-            vista.dlmAsignaturasProfesor.addElement(asignatura);
-        }
-    }
-
-    public void listarAsignaturasDisponiblesProfesor(Profesor profesor){
-        List<Asignatura> asignaturas = modelo.obtenerAsignaturasDisponiblesParaProfesor(profesor);
-        vista.dlmAsignaturasDisponiblesProfesor.clear();
-        for(Asignatura asignatura : asignaturas){
-            vista.dlmAsignaturasDisponiblesProfesor.addElement(asignatura);
-        }
-    }
-
-    public void refrescarSeccionProfesores(){
-        vista.dniProfesorTxt.setText("");
-        vista.nombreProfesorTxt.setText("");
-        vista.dlmAsignaturasDisponiblesProfesor.clear();
-        vista.dlmAsignaturasProfesor.clear();
-        listarProfesores();
-    }
-
-    /**
-     *  Método invocado al cerrar la ventana
-     *  Se usa para desconectar
-     * @param windowEvent
-     */
 
     @Override
     public void windowClosing(WindowEvent windowEvent) {
+        // Guardar datos o realizar acciones antes de cerrar la ventana
         modelo.desconectar();
+    }
+
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+
     }
 }

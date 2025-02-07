@@ -1,57 +1,81 @@
 package com.javiertp.base.mvc;
 
-import com.elenajif.colegio.base.Alumno;
-import com.elenajif.colegio.base.Asignatura;
-import com.elenajif.colegio.base.Profesor;
 import com.github.lgooddatepicker.components.DatePicker;
+import com.javiertp.base.Evento;
+import com.javiertp.base.Usuario;
+import com.javiertp.base.Organizador;
+import com.javiertp.base.Inscripcion;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Vista {
+
+    //Inscripción
     JFrame frame;
     JTabbedPane tabbedPane1;
     JPanel panel1;
-    JTextField nombreAsignaturaTxt;
-    JComboBox departamentoCB;
-    JSpinner horasSpinner;
-    JComboBox profesorCB;
-    JTextField nombreAlumnoTxt;
-    JTextField apellidosAlumnoTxt;
-    DatePicker alumnoDPicker;
-    JTextField nombreProfesorTxt;
-    JTextField dniProfesorTxt;
-    JButton eliminarAlumnoBtn;
-    JButton nuevoAlumnoBtn;
-    JButton matricularEnAsignaturaBtn;
-    JButton desmatricularDeAsignaturaBtn;
-    JButton desmatricularAlumnoBtn;
-    JButton matricularAlumnoBtn;
-    JButton nuevoAsignaturaBtn;
-    JButton eliminarAsignaturaBtn;
-    JList<Asignatura> listAsignaturasDisponiblesProfesor;
-    JList<Profesor> listProfesores;
-    JList<Asignatura> listAsignaturasAlumno;
-    JList<Alumno> listAlumnosAsignatura;
-    JList<Asignatura> listAsignaturasProfesor;
-    JList<Alumno> listAlumnos;
-    JList<Asignatura> listAsignaturasDisponiblesAlumno;
-    JList<Alumno> listAlumnosDisponiblesAsignatura;
-    JList<Asignatura> listAsignaturas;
-    JButton desvincularAsignaturaProfesorBtn;
-    JButton asignarAsignaturaProfesorBtn;
-    JButton nuevoProfesorBtn;
-    JButton eliminarProfesorBtn;
-    DefaultListModel<Asignatura> dlmAsignaturasDisponiblesProfesor;
-    DefaultListModel<Profesor> dlmProfesores;
-    DefaultListModel<Asignatura> dlmAsignaturasAlumno;
-    DefaultListModel<Alumno> dlmAlumnosAsignatura;
-    DefaultListModel<Asignatura> dlmAsignaturasProfesor;
-    DefaultListModel<Alumno> dlmAlumnos;
-    DefaultListModel<Asignatura> dlmAsignaturasDisponiblesAlumno;
-    DefaultListModel<Alumno> dlmAlumnosDisponiblesAsignatura;
-    DefaultListModel<Asignatura> dlmAsignaturas;
-    DefaultComboBoxModel<Profesor> dcbProfesorAsignatura;
+
+    //Usuario
+    JTextField nombreUsuarioTxt;
+    JTextField apellidosUsuarioTxt;
+    JTextField emailUsuarioTxt;
+    DatePicker usuarioDPicker;
+    JButton nuevoUsuarioBtn;
+    JButton eliminarUsuarioBtn;
+    JButton desinscribirseBtn;
+    JButton inscribirEnEventoBtn;
+
+    //Evento
+    JTextField nombreEventoTxt;
+    DatePicker eventoDPicker;
+    JComboBox eventoComboBox;
+    JComboBox organizadorComboBox;
+    JTextField precioEventoTxt;
+    JButton nuevoEventoBtn;
+    JButton eliminarEventoBtn;
+    JButton desinscribirUsuarioBtn;
+    JButton inscribirUsuarioEventoBtn;
+
+    //Organizador
+    JTextField nombreOrganizadorTxt;
+    JTextField apellidosOrganizadorTxt;
+    JTextField emailOrganizadorTxt;
+    JTextField telefonoOrganizadorTxt;
+    JButton nuevoOrganizadorBtn;
+    JButton eliminarOrganizadorBtn;
+    JButton desvincularEventoOrganizadorBtn;
+    JButton asignarEventoOrganizadorBtn;
+
+    //Inscripcion
+    JComboBox eventoInscripcionComboBox;
+    JComboBox usuarioInscripcionComboBox;
+    DatePicker inscripcionDPicker;
+    JComboBox estadoComboBox;
+    JButton nuevaInscripcionBtn;
+    JButton eliminarInscripcionBtn;
+
+    JList<Usuario> listUsuarios;
+    JList<Usuario> listEventosUsuario;
+    JList<Usuario> listEventosDisponiblesUsuario;
+    JList<Evento> listEventos;
+    JList<Evento> listUsuariosEvento;
+    JList<Evento> listUsuariosDisponibles;
+    JList<Organizador> listOrganizadores;
+    JList<Organizador> listEventosOrganizador;
+    JList<Organizador> listEventosDisponiblesOrganizador;
+    JList<Inscripcion> listInscripciones;
+
+    DefaultListModel<Usuario> dlmUsuarios;
+    DefaultListModel<Usuario> dlmEventosUsuario;
+    DefaultListModel<Usuario> dlmEventosDisponiblesUsuario;
+    DefaultListModel<Evento> dlmEventos;
+    DefaultListModel<Evento> dlmUsuariosEvento;
+    DefaultListModel<Evento> dlmUsuariosDisponibles;
+    DefaultListModel<Organizador> dlmOrganizadores;
+    DefaultListModel<Organizador> dlmEventosOrganizador;
+    DefaultListModel<Organizador> dlmEventosDisponiblesOrganizador;
+    DefaultListModel<Inscripcion> dlmInscripciones;
 
     public Vista() {
         frame = new JFrame("Vista");
@@ -65,26 +89,38 @@ public class Vista {
     }
 
     private void iniciarListas() {
-        dlmAsignaturasDisponiblesProfesor = new DefaultListModel<>();
-        listAsignaturasDisponiblesProfesor.setModel(dlmAsignaturasDisponiblesProfesor);
-        dlmProfesores = new DefaultListModel<>();
-        listProfesores.setModel(dlmProfesores);
-        dlmAsignaturasAlumno = new DefaultListModel<>();
-        listAsignaturasAlumno.setModel(dlmAsignaturasAlumno);
-        dlmAlumnosAsignatura = new DefaultListModel<>();
-        listAlumnosAsignatura.setModel(dlmAlumnosAsignatura);
-        dlmAsignaturasProfesor = new DefaultListModel<>();
-        listAsignaturasProfesor.setModel(dlmAsignaturasProfesor);
-        dlmAlumnos = new DefaultListModel<>();
-        listAlumnos.setModel(dlmAlumnos);
-        dlmAsignaturasDisponiblesAlumno = new DefaultListModel<>();
-        listAsignaturasDisponiblesAlumno.setModel(dlmAsignaturasDisponiblesAlumno);
-        dlmAlumnosDisponiblesAsignatura = new DefaultListModel<>();
-        listAlumnosDisponiblesAsignatura.setModel(dlmAlumnosDisponiblesAsignatura);
-        dlmAsignaturas = new DefaultListModel<>();
-        listAsignaturas.setModel(dlmAsignaturas);
-        dcbProfesorAsignatura = new DefaultComboBoxModel<>();
-        profesorCB.setModel(dcbProfesorAsignatura);
-        horasSpinner.setModel(new SpinnerNumberModel());
+        dlmUsuarios = new DefaultListModel<>();
+        listUsuarios.setModel(dlmUsuarios);
+
+        dlmEventosUsuario = new DefaultListModel<>();
+        listEventosUsuario.setModel(dlmEventosUsuario);
+
+        dlmEventosDisponiblesUsuario = new DefaultListModel<>();
+        listEventosDisponiblesUsuario.setModel(dlmEventosDisponiblesUsuario);
+
+        dlmEventos = new DefaultListModel<>();
+        listEventos.setModel(dlmEventos);
+
+        dlmUsuariosEvento = new DefaultListModel<>();
+        listUsuariosEvento.setModel(dlmUsuariosEvento);
+
+        dlmUsuariosDisponibles = new DefaultListModel<>();
+        listUsuariosDisponibles.setModel(dlmUsuariosDisponibles);
+
+        dlmOrganizadores = new DefaultListModel<>();
+        listOrganizadores.setModel(dlmOrganizadores);
+
+        dlmEventosOrganizador = new DefaultListModel<>();
+        listEventosOrganizador.setModel(dlmEventosOrganizador);
+
+        dlmEventosDisponiblesOrganizador = new DefaultListModel<>();
+        listEventosDisponiblesOrganizador.setModel(dlmEventosDisponiblesOrganizador);
+
+        dlmInscripciones = new DefaultListModel<>();
+        listInscripciones.setModel(dlmInscripciones);
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
     }
 }

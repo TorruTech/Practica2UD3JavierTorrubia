@@ -1,87 +1,108 @@
 package com.javiertp.base.mvc;
 
-import com.elenajif.colegio.base.Alumno;
-import com.elenajif.colegio.base.Asignatura;
-import com.elenajif.colegio.base.Profesor;
-import com.elenajif.colegio.util.HibernateUtil;
+import com.javiertp.base.Evento;
+import com.javiertp.base.Usuario;
+import com.javiertp.base.Organizador;
+import com.javiertp.base.Inscripcion;
+import com.javiertp.base.util.HibernateUtil;
 
 import java.util.List;
 
 public class Modelo {
-    public void conectar(){
+
+    public void conectar() {
         HibernateUtil.buildSessionFactory();
         HibernateUtil.openSession();
     }
 
-    public void desconectar(){
+    public void desconectar() {
         HibernateUtil.closeSessionFactory();
     }
 
-    public List<Alumno> obtenerAlumnos(){
-        return HibernateUtil.getCurrentSession().createQuery("FROM Alumno").getResultList();
+    // Obtener todos los usuarios
+    public List<Usuario> obtenerUsuarios() {
+        return HibernateUtil.getCurrentSession().createQuery("FROM Usuario").getResultList();
     }
 
-    public List<Asignatura> obtenerAsignaturas() {
-        return HibernateUtil.getCurrentSession().createQuery("FROM Asignatura").getResultList();
+    // Obtener todos los eventos
+    public List<Evento> obtenerEventos() {
+        return HibernateUtil.getCurrentSession().createQuery("FROM Evento").getResultList();
     }
 
-    public List<Profesor> obtenerProfesores() {
-        return HibernateUtil.getCurrentSession().createQuery("FROM Profesor").getResultList();
+    // Obtener todos los organizadores
+    public List<Organizador> obtenerOrganizadores() {
+        return HibernateUtil.getCurrentSession().createQuery("FROM Organizador").getResultList();
     }
 
-    public List<Alumno> obtenerAlumnosDisponiblesParaAsignatura(Asignatura asignatura) {
-        //Elimino a los alumnos que ya tiene matriculados esa asignatura
-        List<Alumno> lista = obtenerAlumnos();
-        lista.removeAll(asignatura.getAlumnos());
-        return lista;
+    // Obtener inscripciones de un usuario
+    public List<Inscripcion> obtenerInscripcionesPorUsuario(Usuario usuario) {
+        return HibernateUtil.getCurrentSession()
+                .createQuery("FROM Inscripcion WHERE usuario = :usuario")
+                .setParameter("usuario", usuario)
+                .getResultList();
     }
 
-    public List<Asignatura> obtenerAsignaturasDisponiblesParaAlumno(Alumno alumno) {
-        //Elimino las asignaturas en las que ya esta matriculado ese alumno
-        List<Asignatura> lista = obtenerAsignaturas();
-        lista.removeAll(alumno.getAsignaturas());
-        return lista;
+    // Obtener inscripciones de un evento
+    public List<Inscripcion> obtenerInscripcionesPorEvento(Evento evento) {
+        return HibernateUtil.getCurrentSession()
+                .createQuery("FROM Inscripcion WHERE evento = :evento")
+                .setParameter("evento", evento)
+                .getResultList();
     }
 
-    public List<Asignatura> obtenerAsignaturasDisponiblesParaProfesor(Profesor profesor) {
-        List<Asignatura> lista = obtenerAsignaturas();
-        lista.removeAll(profesor.getAsignaturas());
-        return lista;
-    }
-
-    public void guardarAlumno(Alumno alumno) {
+    // Guardar o actualizar un usuario
+    public void guardarUsuario(Usuario usuario) {
         HibernateUtil.getCurrentSession().beginTransaction();
-        HibernateUtil.getCurrentSession().saveOrUpdate(alumno);
+        HibernateUtil.getCurrentSession().saveOrUpdate(usuario);
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 
-    public void guardarAsignatura(Asignatura asignatura) {
+    // Guardar o actualizar un evento
+    public void guardarEvento(Evento evento) {
         HibernateUtil.getCurrentSession().beginTransaction();
-        HibernateUtil.getCurrentSession().saveOrUpdate(asignatura);
+        HibernateUtil.getCurrentSession().saveOrUpdate(evento);
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 
-    public void guardarProfesor(Profesor profesor){
+    // Guardar o actualizar un organizador
+    public void guardarOrganizador(Organizador organizador) {
         HibernateUtil.getCurrentSession().beginTransaction();
-        HibernateUtil.getCurrentSession().saveOrUpdate(profesor);
+        HibernateUtil.getCurrentSession().saveOrUpdate(organizador);
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 
-    public void eliminarAsignatura(Asignatura asignatura) {
+    // Guardar o actualizar una inscripción
+    public void guardarInscripcion(Inscripcion inscripcion) {
         HibernateUtil.getCurrentSession().beginTransaction();
-        HibernateUtil.getCurrentSession().delete(asignatura);
+        HibernateUtil.getCurrentSession().saveOrUpdate(inscripcion);
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 
-    public void eliminarAlumno(Alumno alumno) {
+    // Eliminar un usuario
+    public void eliminarUsuario(Usuario usuario) {
         HibernateUtil.getCurrentSession().beginTransaction();
-        HibernateUtil.getCurrentSession().delete(alumno);
+        HibernateUtil.getCurrentSession().delete(usuario);
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 
-    public void eliminarProfesor(Profesor profesor) {
+    // Eliminar un evento
+    public void eliminarEvento(Evento evento) {
         HibernateUtil.getCurrentSession().beginTransaction();
-        HibernateUtil.getCurrentSession().delete(profesor);
+        HibernateUtil.getCurrentSession().delete(evento);
+        HibernateUtil.getCurrentSession().getTransaction().commit();
+    }
+
+    // Eliminar un organizador
+    public void eliminarOrganizador(Organizador organizador) {
+        HibernateUtil.getCurrentSession().beginTransaction();
+        HibernateUtil.getCurrentSession().delete(organizador);
+        HibernateUtil.getCurrentSession().getTransaction().commit();
+    }
+
+    // Eliminar una inscripción
+    public void eliminarInscripcion(Inscripcion inscripcion) {
+        HibernateUtil.getCurrentSession().beginTransaction();
+        HibernateUtil.getCurrentSession().delete(inscripcion);
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 }
