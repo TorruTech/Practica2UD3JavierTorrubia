@@ -22,9 +22,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         addActionListener(this);
         addListSelectionListener(this);
         addWindowListener(this);
-
-        modelo.conectar();
-
+        
         refrescarSeccionEventos();
         refrescarSeccionUsuarios();
         refrescarSeccionOrganizadores();
@@ -36,8 +34,10 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         vista.nuevoEventoBtn.addActionListener(listener);
         vista.eliminarEventoBtn.addActionListener(listener);
         vista.nuevoUsuarioBtn.addActionListener(listener);
+        vista.nuevoUsuarioBtn.setActionCommand("NuevoUsuario");
         vista.eliminarUsuarioBtn.addActionListener(listener);
         vista.nuevoOrganizadorBtn.addActionListener(listener);
+        vista.nuevoOrganizadorBtn.setActionCommand("NuevoOrganizador");
         vista.nuevaInscripcionBtn.addActionListener(listener);
         vista.eliminarInscripcionBtn.addActionListener(listener);
         vista.eliminarOrganizadorBtn.addActionListener(listener);
@@ -47,6 +47,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         vista.inscribirEnEventoBtn.addActionListener(listener);
         vista.inscribirUsuarioEventoBtn.addActionListener(listener);
         vista.asignarEventoOrganizadorBtn.addActionListener(listener);
+
+        vista.salirItem.addActionListener(listener);
+        vista.conexionItem.addActionListener(listener);
     }
 
     // Método para agregar los ListSelectionListener
@@ -79,6 +82,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
 
             // Sección de Usuarios
             case "NuevoUsuario":
+                Usuario usuarioAinsertar = new Usuario(vista.nombreUsuarioTxt.getText(), vista.apellidosUsuarioTxt.getText(),
+                        vista.emailUsuarioTxt.getText(), Date.valueOf(vista.usuarioDPicker.getDate()));
+                modelo.guardarUsuario(usuarioAinsertar);
                 break;
 
             case "EliminarUsuario":
@@ -89,6 +95,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
 
             // Sección de Organizadores
             case "NuevoOrganizador":
+                Organizador organizadorAInsertar = new Organizador(vista.nombreOrganizadorTxt.getText(), vista.apellidosOrganizadorTxt.getText(),
+                        vista.telefonoOrganizadorTxt.getText(), vista.emailOrganizadorTxt.getText());
+                modelo.guardarOrganizador(organizadorAInsertar);
                 break;
 
             case "EliminarOrganizador":
@@ -106,10 +115,21 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                 Inscripcion inscripcionEliminar = vista.listInscripciones.getSelectedValue();
                 modelo.eliminarInscripcion(inscripcionEliminar);
                 break;
-
+            case "Conectar":
+                vista.conexionItem.setEnabled(false);
+                modelo.conectar();
+                break;
+            case "Salir":
+                modelo.desconectar();
+                System.exit(0);
+                break;
             default:
                 break;
         }
+        refrescarSeccionUsuarios();
+        refrescarSeccionEventos();
+        refrescarSeccionOrganizadores();
+        refrescarSeccionInscripciones();
     }
 
     // Métodos para refrescar la vista con datos actualizados (según el modelo)
@@ -118,10 +138,17 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
     }
 
     private void refrescarSeccionUsuarios() {
-
+        vista.nombreUsuarioTxt.setText("");
+        vista.apellidosUsuarioTxt.setText("");
+        vista.emailUsuarioTxt.setText("");
+        vista.usuarioDPicker.setText("");
     }
 
     private void refrescarSeccionOrganizadores() {
+        vista.nombreOrganizadorTxt.setText("");
+        vista.apellidosOrganizadorTxt.setText("");
+        vista.telefonoOrganizadorTxt.setText("");
+        vista.emailUsuarioTxt.setText("");
 
     }
 

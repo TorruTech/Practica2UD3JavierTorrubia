@@ -1,6 +1,8 @@
 package com.javiertp.base;
 
 import javax.persistence.*;
+import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,6 +15,18 @@ public class Organizador {
     private String telefono;
     private String email;
     private List<Evento> eventos;
+
+    public Organizador(String nombre, String apellidos, String telefono, String email) {
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.telefono = telefono;
+        this.email = email;
+        this.eventos = new ArrayList<>();
+    }
+
+    public Organizador() {
+
+    }
 
     @Id
     @Column(name = "id")

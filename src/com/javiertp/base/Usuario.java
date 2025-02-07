@@ -15,6 +15,17 @@ public class Usuario {
     private Date fechaRegistro;
     private List<Inscripcion> inscripciones;
 
+    public Usuario() {
+
+    }
+
+    public Usuario(String nombre, String apellidos, String email, Date fechaRegistro) {
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.email = email;
+        this.fechaRegistro = fechaRegistro;
+    }
+
     @Id
     @Column(name = "id")
     public int getId() {

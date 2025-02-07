@@ -5,6 +5,8 @@ import com.javiertp.base.Evento;
 import com.javiertp.base.Usuario;
 import com.javiertp.base.Organizador;
 import com.javiertp.base.Inscripcion;
+import com.javiertp.base.enums.Estados;
+import com.javiertp.base.enums.Ubicaciones;
 
 import javax.swing.*;
 import java.awt.*;
@@ -77,6 +79,9 @@ public class Vista {
     DefaultListModel<Organizador> dlmEventosDisponiblesOrganizador;
     DefaultListModel<Inscripcion> dlmInscripciones;
 
+    JMenuItem conexionItem;
+    JMenuItem salirItem;
+
     public Vista() {
         frame = new JFrame("Vista");
         frame.setContentPane(panel1);
@@ -85,7 +90,9 @@ public class Vista {
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
         frame.setSize(new Dimension(600,600));
+        crearMenu();
         iniciarListas();
+        setEnumComboBox();
     }
 
     private void iniciarListas() {
@@ -122,5 +129,36 @@ public class Vista {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
+    }
+
+    private void setEnumComboBox() {
+
+        for (Ubicaciones ubicacion: Ubicaciones.values()) {
+            eventoComboBox.addItem(ubicacion.getValue());
+        }
+
+        eventoComboBox.setSelectedIndex(-1);
+
+        for (Estados estado: Estados.values()) {
+            estadoComboBox.addItem(estado.getValue());
+        }
+
+        estadoComboBox.setSelectedIndex(-1);
+    }
+
+    private void crearMenu() {
+        JMenuBar barra = new JMenuBar();
+        JMenu menu = new JMenu("Archivo");
+
+        conexionItem = new JMenuItem("Conectar");
+        conexionItem.setActionCommand("Conectar");
+
+        salirItem = new JMenuItem("Salir");
+        salirItem.setActionCommand("Salir");
+
+        menu.add(conexionItem);
+        menu.add(salirItem);
+        barra.add(menu);
+        frame.setJMenuBar(barra);
     }
 }
