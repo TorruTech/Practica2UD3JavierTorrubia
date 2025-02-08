@@ -7,7 +7,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <tabbedpane id="273cf" binding="tabbedPane1" default-binding="true">
+      <tabbedpane id="273cf" binding="tabbedPane1">
         <constraints border-constraint="Center"/>
         <properties/>
         <border type="none"/>
@@ -123,6 +123,12 @@
                     <properties>
                       <actionCommand value="NuevoAlumno"/>
                       <text value="Nuevo"/>
+                    </properties>
+                  </component>
+                  <component id="f04a2" class="javax.swing.JButton" binding="modificarUsuarioBtn">
+                    <constraints/>
+                    <properties>
+                      <text value="Modificar"/>
                     </properties>
                   </component>
                   <component id="d87e2" class="javax.swing.JButton" binding="eliminarUsuarioBtn">
@@ -371,6 +377,12 @@
                       <text value="Nuevo"/>
                     </properties>
                   </component>
+                  <component id="817f5" class="javax.swing.JButton" binding="modificarEventoBtn">
+                    <constraints/>
+                    <properties>
+                      <text value="Modificar"/>
+                    </properties>
+                  </component>
                   <component id="618d3" class="javax.swing.JButton" binding="eliminarEventoBtn">
                     <constraints/>
                     <properties>
@@ -583,6 +595,12 @@
                       <text value="Nuevo"/>
                     </properties>
                   </component>
+                  <component id="7bbcf" class="javax.swing.JButton" binding="modificarOrganizadorBtn">
+                    <constraints/>
+                    <properties>
+                      <text value="Modificar"/>
+                    </properties>
+                  </component>
                   <component id="8840a" class="javax.swing.JButton" binding="eliminarOrganizadorBtn">
                     <constraints/>
                     <properties>
@@ -725,6 +743,12 @@
                     <properties>
                       <actionCommand value="NuevoAlumno"/>
                       <text value="Nuevo"/>
+                    </properties>
+                  </component>
+                  <component id="d88ff" class="javax.swing.JButton" binding="modificarInscripcionBtn">
+                    <constraints/>
+                    <properties>
+                      <text value="Modificar"/>
                     </properties>
                   </component>
                   <component id="73193" class="javax.swing.JButton" binding="eliminarInscripcionBtn">

@@ -17,8 +17,8 @@ import javax.swing.event.ListSelectionListener;
 
 public class Controlador extends WindowAdapter implements ActionListener, ListSelectionListener {
 
-    private Vista vista;
-    private Modelo modelo;
+    private final Vista vista;
+    private final Modelo modelo;
 
     public Controlador(Vista vista, Modelo modelo) {
 
@@ -43,16 +43,24 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
     private void addActionListener(ActionListener listener){
         vista.nuevoEventoBtn.addActionListener(listener);
         vista.nuevoEventoBtn.setActionCommand("NuevoEvento");
+        vista.modificarEventoBtn.addActionListener(listener);
+        vista.modificarEventoBtn.setActionCommand("ModificarEvento");
         vista.eliminarEventoBtn.addActionListener(listener);
         vista.eliminarEventoBtn.setActionCommand("EliminarEvento");
         vista.nuevoUsuarioBtn.addActionListener(listener);
         vista.nuevoUsuarioBtn.setActionCommand("NuevoUsuario");
+        vista.modificarUsuarioBtn.addActionListener(listener);
+        vista.modificarUsuarioBtn.setActionCommand("ModificarUsuario");
         vista.eliminarUsuarioBtn.addActionListener(listener);
         vista.eliminarUsuarioBtn.setActionCommand("EliminarUsuario");
         vista.nuevoOrganizadorBtn.addActionListener(listener);
         vista.nuevoOrganizadorBtn.setActionCommand("NuevoOrganizador");
+        vista.modificarOrganizadorBtn.addActionListener(listener);
+        vista.modificarOrganizadorBtn.setActionCommand("ModificarOrganizador");
         vista.nuevaInscripcionBtn.addActionListener(listener);
         vista.nuevaInscripcionBtn.setActionCommand("NuevaInscripcion");
+        vista.modificarInscripcionBtn.addActionListener(listener);
+        vista.modificarInscripcionBtn.setActionCommand("ModificarInscripcion");
         vista.eliminarInscripcionBtn.addActionListener(listener);
         vista.eliminarInscripcionBtn.setActionCommand("EliminarInscripcion");
         vista.eliminarOrganizadorBtn.addActionListener(listener);
@@ -90,6 +98,13 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                         (Organizador) vista.organizadorComboBox.getSelectedItem());
                 modelo.guardarEvento(eventoAInsertar);
                 break;
+            case "ModificarEvento":
+                Evento eventoAModificar = vista.listEventos.getSelectedValue();
+                eventoAModificar.setNombre(vista.nombreEventoTxt.getText());
+                eventoAModificar.setOrganizador((Organizador) vista.organizadorComboBox.getSelectedItem());
+                eventoAModificar.setPrecio(Float.parseFloat(vista.precioEventoTxt.getText()));
+                modelo.modificarEvento(eventoAModificar);
+                break;
             case "EliminarEvento":
                 Evento eventoEliminar = vista.listEventos.getSelectedValue();
                 modelo.eliminarEvento(eventoEliminar);
@@ -99,6 +114,13 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                         vista.emailUsuarioTxt.getText(), Date.valueOf(vista.usuarioDPicker.getDate()));
                 modelo.guardarUsuario(usuarioAinsertar);
                 break;
+            case "ModificarUsuario":
+                Usuario usuarioAModificar = vista.listUsuarios.getSelectedValue();
+                usuarioAModificar.setNombre(vista.nombreUsuarioTxt.getText());
+                usuarioAModificar.setApellidos(vista.apellidosUsuarioTxt.getText());
+                usuarioAModificar.setEmail(vista.emailUsuarioTxt.getText());
+                modelo.modificarUsuario(usuarioAModificar);
+                break;
             case "EliminarUsuario":
                 Usuario usuarioEliminar = vista.listUsuarios.getSelectedValue();
                 modelo.eliminarUsuario(usuarioEliminar);
@@ -107,6 +129,14 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                 Organizador organizadorAInsertar = new Organizador(vista.nombreOrganizadorTxt.getText(), vista.apellidosOrganizadorTxt.getText(),
                         vista.telefonoOrganizadorTxt.getText(), vista.emailOrganizadorTxt.getText());
                 modelo.guardarOrganizador(organizadorAInsertar);
+                break;
+            case "ModificarOrganizador":
+                Organizador organizadorAModificar = vista.listOrganizadores.getSelectedValue();
+                organizadorAModificar.setNombre(vista.nombreOrganizadorTxt.getText());
+                organizadorAModificar.setApellidos(vista.apellidosOrganizadorTxt.getText());
+                organizadorAModificar.setTelefono(vista.telefonoOrganizadorTxt.getText());
+                organizadorAModificar.setEmail(vista.emailOrganizadorTxt.getText());
+                modelo.modificarOrganizador(organizadorAModificar);
                 break;
             case "EliminarOrganizador":
                 Organizador organizadorEliminar = vista.listOrganizadores.getSelectedValue();
@@ -120,9 +150,16 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                         (Usuario) vista.usuarioInscripcionComboBox.getSelectedItem());
                 modelo.guardarInscripcion(inscripcionAInsertar);
                 break;
+            case "ModificarInscripcion":
+                Inscripcion inscripcionAModificar = vista.listInscripciones.getSelectedValue();
+                inscripcionAModificar.setEstado(vista.estadoComboBox.getSelectedItem().toString());
+                inscripcionAModificar.setEvento((Evento) vista.eventoInscripcionComboBox.getSelectedItem());
+                inscripcionAModificar.setUsuario((Usuario) vista.usuarioInscripcionComboBox.getSelectedItem());
+                modelo.modificarInscripcion(inscripcionAModificar);
+                break;
             case "InscribirUsuario":
                 break;
-            case "DeshacerInscripcion":
+            case "EliminarInscripcion":
                 Inscripcion inscripcionEliminar = vista.listInscripciones.getSelectedValue();
                 modelo.eliminarInscripcion(inscripcionEliminar);
                 break;
@@ -158,11 +195,27 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    private void listarUsuariosPorEvento(Evento evento){
+        List<Inscripcion> inscripciones = evento.getInscripciones();
+        vista.dlmUsuariosEvento.clear();
+        for(Inscripcion inscripcion : inscripciones){
+            vista.dlmUsuariosEvento.addElement(inscripcion.getUsuario());
+        }
+    }
+
     private void listarEventos(){
         List<Evento> eventos = modelo.obtenerEventos();
         vista.dlmEventos.clear();
         for(Evento evento : eventos){
             vista.dlmEventos.addElement(evento);
+        }
+    }
+
+    private void listarEventosPorOrganizador(Organizador organizador){
+        List<Evento> eventos = organizador.getEventos();
+        vista.dlmEventosOrganizador.clear();
+        for(Evento evento : eventos){
+            vista.dlmEventosOrganizador.addElement(evento);
         }
     }
 
@@ -263,7 +316,43 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
     }
 
     @Override
-    public void valueChanged(ListSelectionEvent e) {
+    public void valueChanged(ListSelectionEvent listSelectionEvent) {
+        // Si la lista de eventos cambia de selección
+        if(listSelectionEvent.getSource() == vista.listEventos && vista.listEventos.getSelectedValue() != null){
+            Evento evento = vista.listEventos.getSelectedValue();
+            vista.nombreEventoTxt.setText(evento.getNombre());
+            vista.eventoComboBox.setSelectedItem(evento.getUbicacion());
+            vista.organizadorComboBox.setSelectedItem(evento.getOrganizador());
+            vista.eventoDPicker.setDate(evento.getFechaInicio().toLocalDate());
+            vista.precioEventoTxt.setText(String.valueOf(evento.getPrecio()));
+            listarUsuariosPorEvento(evento);
+        }
+        // Si la lista de usuarios cambia de selección
+        else if(listSelectionEvent.getSource() == vista.listUsuarios && vista.listUsuarios.getSelectedValue() != null){
+            Usuario usuario = vista.listUsuarios.getSelectedValue();
+            vista.nombreUsuarioTxt.setText(usuario.getNombre());
+            vista.apellidosUsuarioTxt.setText(usuario.getApellidos());
+            vista.emailUsuarioTxt.setText(usuario.getEmail());
+            vista.usuarioDPicker.setDate(usuario.getFechaRegistro().toLocalDate());
+            listarInscripcionesPorUsuario(usuario);
+        }
+        // Si la lista de organizadores cambia de selección
+        else if(listSelectionEvent.getSource() == vista.listOrganizadores && vista.listOrganizadores.getSelectedValue() != null){
+            Organizador organizador = vista.listOrganizadores.getSelectedValue();
+            vista.nombreOrganizadorTxt.setText(organizador.getNombre());
+            vista.apellidosOrganizadorTxt.setText(organizador.getApellidos());
+            vista.telefonoOrganizadorTxt.setText(organizador.getTelefono());
+            vista.emailOrganizadorTxt.setText(organizador.getEmail());
+            listarEventosPorOrganizador(organizador);
+        }
+        // Si la lista de inscripciones cambia de selección
+        else if(listSelectionEvent.getSource() == vista.listInscripciones && vista.listInscripciones.getSelectedValue() != null){
+            Inscripcion inscripcion = vista.listInscripciones.getSelectedValue();
+            vista.eventoInscripcionComboBox.setSelectedItem(inscripcion.getEvento());
+            vista.usuarioInscripcionComboBox.setSelectedItem(inscripcion.getUsuario());
+            vista.inscripcionDPicker.setDate(inscripcion.getFechaInscripcion().toLocalDate());
+            vista.estadoComboBox.setSelectedItem(inscripcion.getEstado());
 
+        }
     }
 }

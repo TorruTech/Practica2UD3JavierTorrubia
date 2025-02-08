@@ -83,6 +83,34 @@ public class Modelo {
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 
+    //Modificar un usuario
+    public void modificarUsuario(Usuario usuario) {
+        HibernateUtil.getCurrentSession().beginTransaction();
+        HibernateUtil.getCurrentSession().update(usuario);
+        HibernateUtil.getCurrentSession().getTransaction().commit();
+    }
+
+    //Modificar un evento
+    public void modificarEvento(Evento evento) {
+        HibernateUtil.getCurrentSession().beginTransaction();
+        HibernateUtil.getCurrentSession().update(evento);
+        HibernateUtil.getCurrentSession().getTransaction().commit();
+    }
+
+    //Modificar un organizador
+    public void modificarOrganizador(Organizador organizador) {
+        HibernateUtil.getCurrentSession().beginTransaction();
+        HibernateUtil.getCurrentSession().update(organizador);
+        HibernateUtil.getCurrentSession().getTransaction().commit();
+    }
+
+    //Modificar una inscripcion
+    public void modificarInscripcion(Inscripcion inscripcion) {
+        HibernateUtil.getCurrentSession().beginTransaction();
+        HibernateUtil.getCurrentSession().update(inscripcion);
+        HibernateUtil.getCurrentSession().getTransaction().commit();
+    }
+
     // Eliminar un usuario
     public void eliminarUsuario(Usuario usuario) {
         HibernateUtil.getCurrentSession().beginTransaction();

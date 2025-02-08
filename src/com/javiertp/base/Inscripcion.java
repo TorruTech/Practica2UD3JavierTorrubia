@@ -2,7 +2,7 @@ package com.javiertp.base;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Date;
+import java.sql.Date;
 import java.util.Objects;
 
 @Entity
@@ -35,11 +35,12 @@ public class Inscripcion {
 
     @Basic
     @Column(name = "fecha_inscripcion")
+
     public Date getFechaInscripcion() {
         return fechaInscripcion;
     }
 
-    public void setFechaInscripcion(Timestamp fechaInscripcion) {
+    public void setFechaInscripcion(Date fechaInscripcion) {
         this.fechaInscripcion = fechaInscripcion;
     }
 

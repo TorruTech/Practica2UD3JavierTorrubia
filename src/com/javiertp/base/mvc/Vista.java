@@ -24,9 +24,9 @@ public class Vista {
     JTextField emailUsuarioTxt;
     DatePicker usuarioDPicker;
     JButton nuevoUsuarioBtn;
+    JButton modificarUsuarioBtn;
     JButton eliminarUsuarioBtn;
     JButton desinscribirseBtn;
-    JButton inscribirEnEventoBtn;
 
     //Evento
     JTextField nombreEventoTxt;
@@ -35,6 +35,7 @@ public class Vista {
     JComboBox organizadorComboBox;
     JTextField precioEventoTxt;
     JButton nuevoEventoBtn;
+    JButton modificarEventoBtn;
     JButton eliminarEventoBtn;
     JButton desinscribirUsuarioBtn;
     JButton inscribirUsuarioEventoBtn;
@@ -45,6 +46,7 @@ public class Vista {
     JTextField emailOrganizadorTxt;
     JTextField telefonoOrganizadorTxt;
     JButton nuevoOrganizadorBtn;
+    JButton modificarOrganizadorBtn;
     JButton eliminarOrganizadorBtn;
     JButton desvincularEventoOrganizadorBtn;
     JButton asignarEventoOrganizadorBtn;
@@ -55,25 +57,26 @@ public class Vista {
     DatePicker inscripcionDPicker;
     JComboBox estadoComboBox;
     JButton nuevaInscripcionBtn;
+    JButton modificarInscripcionBtn;
     JButton eliminarInscripcionBtn;
 
     JList<Usuario> listUsuarios;
     JList<Evento> listInscripcionesUsuario;
     JList<Evento> listEventos;
-    JList<Evento> listUsuariosEvento;
+    JList<Usuario> listUsuariosEvento;
     JList<Evento> listUsuariosDisponibles;
     JList<Organizador> listOrganizadores;
-    JList<Organizador> listEventosOrganizador;
+    JList<Evento> listEventosOrganizador;
     JList<Organizador> listEventosDisponiblesOrganizador;
     JList<Inscripcion> listInscripciones;
 
     DefaultListModel<Usuario> dlmUsuarios;
     DefaultListModel<Evento> dlmEventosUsuario;
     DefaultListModel<Evento> dlmEventos;
-    DefaultListModel<Evento> dlmUsuariosEvento;
+    DefaultListModel<Usuario> dlmUsuariosEvento;
     DefaultListModel<Evento> dlmUsuariosDisponibles;
     DefaultListModel<Organizador> dlmOrganizadores;
-    DefaultListModel<Organizador> dlmEventosOrganizador;
+    DefaultListModel<Evento> dlmEventosOrganizador;
     DefaultListModel<Organizador> dlmEventosDisponiblesOrganizador;
     DefaultListModel<Inscripcion> dlmInscripciones;
 
