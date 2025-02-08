@@ -58,8 +58,7 @@ public class Vista {
     JButton eliminarInscripcionBtn;
 
     JList<Usuario> listUsuarios;
-    JList<Usuario> listEventosUsuario;
-    JList<Usuario> listEventosDisponiblesUsuario;
+    JList<Evento> listInscripcionesUsuario;
     JList<Evento> listEventos;
     JList<Evento> listUsuariosEvento;
     JList<Evento> listUsuariosDisponibles;
@@ -69,8 +68,7 @@ public class Vista {
     JList<Inscripcion> listInscripciones;
 
     DefaultListModel<Usuario> dlmUsuarios;
-    DefaultListModel<Usuario> dlmEventosUsuario;
-    DefaultListModel<Usuario> dlmEventosDisponiblesUsuario;
+    DefaultListModel<Evento> dlmEventosUsuario;
     DefaultListModel<Evento> dlmEventos;
     DefaultListModel<Evento> dlmUsuariosEvento;
     DefaultListModel<Evento> dlmUsuariosDisponibles;
@@ -78,6 +76,10 @@ public class Vista {
     DefaultListModel<Organizador> dlmEventosOrganizador;
     DefaultListModel<Organizador> dlmEventosDisponiblesOrganizador;
     DefaultListModel<Inscripcion> dlmInscripciones;
+
+    DefaultComboBoxModel<Organizador> dcbOrganizadorEvento;
+    DefaultComboBoxModel<Evento> dcbEventosInscripcion;
+    DefaultComboBoxModel<Usuario> dcbUsuariosInscripcion;
 
     JMenuItem conexionItem;
     JMenuItem salirItem;
@@ -99,11 +101,8 @@ public class Vista {
         dlmUsuarios = new DefaultListModel<>();
         listUsuarios.setModel(dlmUsuarios);
 
-        dlmEventosUsuario = new DefaultListModel<>();
-        listEventosUsuario.setModel(dlmEventosUsuario);
-
-        dlmEventosDisponiblesUsuario = new DefaultListModel<>();
-        listEventosDisponiblesUsuario.setModel(dlmEventosDisponiblesUsuario);
+        dlmEventosUsuario = new DefaultListModel<Evento>();
+        listInscripcionesUsuario.setModel(dlmEventosUsuario);
 
         dlmEventos = new DefaultListModel<>();
         listEventos.setModel(dlmEventos);
@@ -125,6 +124,15 @@ public class Vista {
 
         dlmInscripciones = new DefaultListModel<>();
         listInscripciones.setModel(dlmInscripciones);
+
+        dcbOrganizadorEvento = new DefaultComboBoxModel<>();
+        organizadorComboBox.setModel(dcbOrganizadorEvento);
+
+        dcbEventosInscripcion = new DefaultComboBoxModel<>();
+        eventoInscripcionComboBox.setModel(dcbEventosInscripcion);
+
+        dcbUsuariosInscripcion = new DefaultComboBoxModel<>();
+        usuarioInscripcionComboBox.setModel(dcbUsuariosInscripcion);
     }
 
     private void createUIComponents() {

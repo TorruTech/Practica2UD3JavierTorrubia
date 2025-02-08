@@ -28,10 +28,6 @@
             <rowspec value="center:d:grow"/>
             <rowspec value="top:4dlu:noGrow"/>
             <rowspec value="center:max(d;4px):noGrow"/>
-            <rowspec value="top:4dlu:noGrow"/>
-            <rowspec value="center:max(d;4px):noGrow"/>
-            <rowspec value="top:4dlu:noGrow"/>
-            <rowspec value="center:d:grow"/>
             <colspec value="fill:d:noGrow"/>
             <colspec value="left:4dlu:noGrow"/>
             <colspec value="fill:d:grow"/>
@@ -91,20 +87,6 @@
                   </component>
                 </children>
               </scrollpane>
-              <scrollpane id="23243">
-                <constraints>
-                  <grid row="16" column="2" row-span="3" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                  <forms defaultalign-horz="false" defaultalign-vert="false"/>
-                </constraints>
-                <properties/>
-                <border type="none"/>
-                <children>
-                  <component id="79d94" class="javax.swing.JList" binding="listEventosDisponiblesUsuario">
-                    <constraints/>
-                    <properties/>
-                  </component>
-                </children>
-              </scrollpane>
               <scrollpane id="3fbfe">
                 <constraints>
                   <grid row="12" column="2" row-span="3" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -113,7 +95,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="38cf7" class="javax.swing.JList" binding="listEventosUsuario">
+                  <component id="38cf7" class="javax.swing.JList" binding="listInscripcionesUsuario">
                     <constraints/>
                     <properties/>
                   </component>
@@ -125,7 +107,7 @@
                   <forms defaultalign-vert="false"/>
                 </constraints>
                 <properties>
-                  <text value="Inscrito en:"/>
+                  <text value="Inscripciones"/>
                 </properties>
               </component>
               <grid id="9e52b" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
@@ -152,16 +134,6 @@
                   </component>
                 </children>
               </grid>
-              <component id="16f85" class="javax.swing.JButton" binding="inscribirEnEventoBtn">
-                <constraints>
-                  <grid row="18" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
-                  <forms defaultalign-vert="false"/>
-                </constraints>
-                <properties>
-                  <actionCommand value="MatricularAlumno"/>
-                  <text value="Inscribir"/>
-                </properties>
-              </component>
               <component id="20411" class="javax.swing.JButton" binding="desinscribirseBtn">
                 <constraints>
                   <grid row="14" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
@@ -170,15 +142,6 @@
                 <properties>
                   <actionCommand value="DesmatricularAlumno"/>
                   <text value="Desinscribir"/>
-                </properties>
-              </component>
-              <component id="c27db" class="javax.swing.JLabel">
-                <constraints>
-                  <grid row="16" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                  <forms/>
-                </constraints>
-                <properties>
-                  <text value="Asignaturas disponibles:"/>
                 </properties>
               </component>
               <component id="5c5cc" class="javax.swing.JLabel">
@@ -735,13 +698,6 @@
                   <text value="Inscripciones"/>
                 </properties>
               </component>
-              <component id="fa5d6" class="com.github.lgooddatepicker.components.DatePicker" binding="inscripcionDPicker">
-                <constraints>
-                  <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                  <forms/>
-                </constraints>
-                <properties/>
-              </component>
               <scrollpane id="93983">
                 <constraints>
                   <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -808,6 +764,13 @@
               <component id="40d0d" class="javax.swing.JComboBox" binding="usuarioInscripcionComboBox">
                 <constraints>
                   <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                  <forms/>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="4ebb5" class="com.github.lgooddatepicker.components.DatePicker" binding="inscripcionDPicker">
+                <constraints>
+                  <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                   <forms/>
                 </constraints>
                 <properties/>

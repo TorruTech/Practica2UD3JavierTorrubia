@@ -108,4 +108,11 @@ public class Organizador {
     public String toString() {
         return nombre + " " + apellidos + " " + telefono + " " + email;
     }
+
+    public void desvincularEventos() {
+        for (Evento evento : eventos) {
+            evento.setOrganizador(null);
+        }
+        eventos.clear();
+    }
 }

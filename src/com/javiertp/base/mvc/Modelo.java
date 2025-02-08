@@ -34,6 +34,11 @@ public class Modelo {
         return HibernateUtil.getCurrentSession().createQuery("FROM Organizador").getResultList();
     }
 
+    // Obtener todos las inscripciones
+    public List<Inscripcion> obtenerInscripciones() {
+        return HibernateUtil.getCurrentSession().createQuery("FROM Inscripcion").getResultList();
+    }
+
     // Obtener inscripciones de un usuario
     public List<Inscripcion> obtenerInscripcionesPorUsuario(Usuario usuario) {
         return HibernateUtil.getCurrentSession()
@@ -105,4 +110,5 @@ public class Modelo {
         HibernateUtil.getCurrentSession().delete(inscripcion);
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
+
 }

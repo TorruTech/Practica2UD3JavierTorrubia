@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "usuarios", schema = "eventoshibernate", catalog = "")
@@ -106,4 +107,5 @@ public class Usuario {
     public String toString() {
         return nombre + " " + apellidos + " " + email + " " + fechaRegistro;
     }
+
 }

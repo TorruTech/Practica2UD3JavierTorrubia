@@ -2,16 +2,26 @@ package com.javiertp.base;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
 @Table(name = "inscripciones", schema = "eventoshibernate", catalog = "")
 public class Inscripcion {
     private int id;
-    private Timestamp fechaInscripcion;
+    private Date fechaInscripcion;
     private String estado;
     private Evento evento;
     private Usuario usuario;
+
+    public Inscripcion() {}
+
+    public Inscripcion(Date fechaInscripcion, String estado, Evento evento, Usuario usuario) {
+        this.fechaInscripcion = fechaInscripcion;
+        this.estado = estado;
+        this.evento = evento;
+        this.usuario = usuario;
+    }
 
     @Id
     @Column(name = "id")
@@ -25,7 +35,7 @@ public class Inscripcion {
 
     @Basic
     @Column(name = "fecha_inscripcion")
-    public Timestamp getFechaInscripcion() {
+    public Date getFechaInscripcion() {
         return fechaInscripcion;
     }
 
@@ -76,5 +86,10 @@ public class Inscripcion {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    @Override
+    public String toString() {
+        return evento.getNombre() + " " + usuario.getNombre() + " " + fechaInscripcion + " " + estado;
     }
 }
