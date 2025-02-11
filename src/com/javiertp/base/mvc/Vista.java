@@ -1,10 +1,7 @@
 package com.javiertp.base.mvc;
 
 import com.github.lgooddatepicker.components.DatePicker;
-import com.javiertp.base.Evento;
-import com.javiertp.base.Usuario;
-import com.javiertp.base.Organizador;
-import com.javiertp.base.Inscripcion;
+import com.javiertp.base.*;
 import com.javiertp.base.enums.Estados;
 import com.javiertp.base.enums.Ubicaciones;
 
@@ -60,6 +57,16 @@ public class Vista {
     JButton modificarInscripcionBtn;
     JButton eliminarInscripcionBtn;
 
+    //Valoracion
+    JTextField comentarioValoracionTxt;
+    JComboBox usuarioValoracionCombo;
+    JComboBox eventoValoracionCombo;
+    JComboBox organaizadorValoracionCombo;
+    JTextField puntuacionValoracionTxt;
+    JButton nuevoValoracionBtn;
+    JButton modificarValoracionBtn;
+    JButton eliminarValoracionBtn;
+
     JList<Usuario> listUsuarios;
     JList<Evento> listInscripcionesUsuario;
     JList<Evento> listEventos;
@@ -69,6 +76,7 @@ public class Vista {
     JList<Evento> listEventosOrganizador;
     JList<Evento> listEventosDisponiblesOrganizador;
     JList<Inscripcion> listInscripciones;
+    JList<Valoracion> listValoraciones;
 
     DefaultListModel<Usuario> dlmUsuarios;
     DefaultListModel<Evento> dlmEventosUsuario;
@@ -79,10 +87,14 @@ public class Vista {
     DefaultListModel<Evento> dlmEventosOrganizador;
     DefaultListModel<Evento> dlmEventosDisponiblesOrganizador;
     DefaultListModel<Inscripcion> dlmInscripciones;
+    DefaultListModel<Valoracion> dlmValoraciones;
 
     DefaultComboBoxModel<Organizador> dcbOrganizadorEvento;
     DefaultComboBoxModel<Evento> dcbEventosInscripcion;
     DefaultComboBoxModel<Usuario> dcbUsuariosInscripcion;
+    DefaultComboBoxModel<Organizador> dcbOrganizadorValoracion;
+    DefaultComboBoxModel<Evento> dcbEventoValoracion;
+    DefaultComboBoxModel<Usuario> dcbUsuarioValoracion;
 
     JMenuItem conexionItem;
     JMenuItem salirItem;
@@ -128,6 +140,9 @@ public class Vista {
         dlmInscripciones = new DefaultListModel<>();
         listInscripciones.setModel(dlmInscripciones);
 
+        dlmValoraciones = new DefaultListModel<>();
+        listValoraciones.setModel(dlmValoraciones);
+
         dcbOrganizadorEvento = new DefaultComboBoxModel<>();
         organizadorComboBox.setModel(dcbOrganizadorEvento);
 
@@ -136,6 +151,15 @@ public class Vista {
 
         dcbUsuariosInscripcion = new DefaultComboBoxModel<>();
         usuarioInscripcionComboBox.setModel(dcbUsuariosInscripcion);
+
+        dcbOrganizadorValoracion = new DefaultComboBoxModel<>();
+        organaizadorValoracionCombo.setModel(dcbOrganizadorValoracion);
+
+        dcbEventoValoracion = new DefaultComboBoxModel<>();
+        eventoValoracionCombo.setModel(dcbEventoValoracion);
+
+        dcbUsuarioValoracion = new DefaultComboBoxModel<>();
+        usuarioValoracionCombo.setModel(dcbUsuarioValoracion);
     }
 
     private void createUIComponents() {

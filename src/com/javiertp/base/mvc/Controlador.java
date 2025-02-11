@@ -63,6 +63,12 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         vista.eliminarInscripcionBtn.setActionCommand("EliminarInscripcion");
         vista.eliminarOrganizadorBtn.addActionListener(listener);
         vista.eliminarOrganizadorBtn.setActionCommand("EliminarOrganizador");
+        vista.nuevoValoracionBtn.addActionListener(listener);
+        vista.nuevoValoracionBtn.setActionCommand("NuevaValoracion");
+        vista.modificarValoracionBtn.addActionListener(listener);
+        vista.modificarValoracionBtn.setActionCommand("ModificarValoracion");
+        vista.eliminarValoracionBtn.addActionListener(listener);
+        vista.eliminarValoracionBtn.setActionCommand("EliminarValoracion");
         vista.desinscribirUsuarioBtn.addActionListener(listener);
         vista.desvincularEventoOrganizadorBtn.addActionListener(listener);
         vista.desinscribirseBtn.addActionListener(listener);
