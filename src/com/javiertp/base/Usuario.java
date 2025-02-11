@@ -2,6 +2,7 @@ package com.javiertp.base;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,6 +15,7 @@ public class Usuario {
     private String email;
     private Date fechaRegistro;
     private List<Inscripcion> inscripciones;
+    private List<Valoracion> valoraciones;
 
     public Usuario() {
 
@@ -102,9 +104,30 @@ public class Usuario {
         this.inscripciones = inscripciones;
     }
 
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    public List<Valoracion> getValoraciones() {
+        return valoraciones;
+    }
+
+    public void setValoraciones(List<Valoracion> valoraciones) {
+        this.valoraciones = valoraciones;
+    }
+
     @Override
     public String toString() {
         return nombre + " " + apellidos + " " + email + " " + fechaRegistro;
+    }
+
+    public void desinscribirse(Evento evento) {
+        Iterator<Inscripcion> iterator = inscripciones.iterator();
+
+        while (iterator.hasNext()) {
+            Inscripcion inscripcion = iterator.next();
+            if (inscripcion.getEvento().equals(evento)) {
+                iterator.remove();  // Elimina de manera segura el elemento de la lista
+                break;  // No es necesario seguir buscando una vez que se desinscribe el usuario
+            }
+        }
     }
 
 }

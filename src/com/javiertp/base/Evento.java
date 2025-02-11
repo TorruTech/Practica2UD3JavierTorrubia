@@ -105,7 +105,7 @@ public class Evento {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_organizador", referencedColumnName = "id")
+    @JoinColumn(name = "id_organizador", referencedColumnName = "id", nullable = true)
     public Organizador getOrganizador() {
         return organizador;
     }
@@ -117,5 +117,14 @@ public class Evento {
     @Override
     public String toString() {
         return nombre + " " + ubicacion + " " + fechaInicio + " " + precio + " " + (organizador == null ? "" : organizador.getNombre());
+    }
+
+    public Inscripcion getInscripcion(Usuario usuarioDesinscribir) {
+        for (Inscripcion inscripcion : inscripciones) {
+            if (inscripcion.getUsuario().equals(usuarioDesinscribir)) {
+                return inscripcion;
+            }
+        }
+        return null;
     }
 }

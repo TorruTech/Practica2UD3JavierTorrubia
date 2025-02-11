@@ -89,6 +89,11 @@ public class Modelo {
 
     // Guardar o actualizar una valoracion
     public void guardarValoracion(Valoracion valoracion) {
+
+        if (HibernateUtil.getCurrentSession().getTransaction().isActive()) {
+            HibernateUtil.getCurrentSession().getTransaction().commit();
+        }
+
         HibernateUtil.getCurrentSession().beginTransaction();
         HibernateUtil.getCurrentSession().saveOrUpdate(valoracion);
         HibernateUtil.getCurrentSession().getTransaction().commit();
@@ -201,5 +206,23 @@ public class Modelo {
         return eventos;
     }
 
+    public void desvincularOrganizador(Evento eventoDesvincular) {
+        HibernateUtil.getCurrentSession().beginTransaction();
+        eventoDesvincular.setOrganizador(null);
+        HibernateUtil.getCurrentSession().update(eventoDesvincular);
+        HibernateUtil.getCurrentSession().getTransaction().commit();
+    }
 
+    public void asignarOrganizador(Evento eventoAsignar, Organizador organizadorAsignar) {
+        HibernateUtil.getCurrentSession().beginTransaction();
+        eventoAsignar.setOrganizador(organizadorAsignar);
+        HibernateUtil.getCurrentSession().update(eventoAsignar);
+        HibernateUtil.getCurrentSession().getTransaction().commit();
+    }
+
+    public void desinscribirse(Inscripcion inscripcionADesinscibir) {
+        HibernateUtil.getCurrentSession().beginTransaction();
+        HibernateUtil.getCurrentSession().delete(inscripcionADesinscibir);
+        HibernateUtil.getCurrentSession().getTransaction().commit();
+    }
 }

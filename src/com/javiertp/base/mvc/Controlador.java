@@ -1,14 +1,18 @@
 package com.javiertp.base.mvc;
 
 import com.javiertp.base.*;
+import com.javiertp.base.util.HibernateUtil;
 import com.javiertp.base.util.Util;
 
 import java.awt.event.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import static com.javiertp.base.util.HibernateUtil.session;
 
 public class Controlador extends WindowAdapter implements ActionListener, ListSelectionListener {
 
@@ -23,6 +27,17 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         addActionListener(this);
         addListSelectionListener(this);
         addWindowListener(this);
+
+        vista.listValoraciones.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                int index = vista.listValoraciones.locationToIndex(e.getPoint());
+                if (index >= 0) {
+                    Object info = vista.listValoraciones.getModel().getElementAt(index);
+                    vista.listValoraciones.setToolTipText(info.toString());
+                }
+            }
+        });
 
         try {
             refrescarSeccionEventos();
@@ -68,10 +83,15 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         vista.eliminarValoracionBtn.addActionListener(listener);
         vista.eliminarValoracionBtn.setActionCommand("EliminarValoracion");
         vista.desinscribirUsuarioBtn.addActionListener(listener);
+        vista.desinscribirUsuarioBtn.setActionCommand("DesinscribirUsuarioEvento");
         vista.desvincularEventoOrganizadorBtn.addActionListener(listener);
+        vista.desvincularEventoOrganizadorBtn.setActionCommand("DesvincularOrganizador");
         vista.desinscribirseBtn.addActionListener(listener);
+        vista.desinscribirseBtn.setActionCommand("DesinscribirUsuario");
         vista.inscribirUsuarioEventoBtn.addActionListener(listener);
+        vista.inscribirUsuarioEventoBtn.setActionCommand("InscribirUsuario");
         vista.asignarEventoOrganizadorBtn.addActionListener(listener);
+        vista.asignarEventoOrganizadorBtn.setActionCommand("AsignarOrganizador");
 
         vista.salirItem.addActionListener(listener);
         vista.conexionItem.addActionListener(listener);
@@ -94,114 +114,178 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
     public void actionPerformed(ActionEvent actionEvent) {
         String comando = actionEvent.getActionCommand();
 
-        switch(comando) {
-            case "NuevoEvento":
-                Evento eventoAInsertar = new Evento(vista.nombreEventoTxt.getText(), String.valueOf(vista.eventoComboBox.getSelectedItem()),
-                        Date.valueOf(vista.eventoDPicker.getDate()), Float.parseFloat(vista.precioEventoTxt.getText()),
-                        (Organizador) vista.organizadorComboBox.getSelectedItem());
-                modelo.guardarEvento(eventoAInsertar);
-                break;
-            case "ModificarEvento":
-                Evento eventoAModificar = vista.listEventos.getSelectedValue();
-                eventoAModificar.setNombre(vista.nombreEventoTxt.getText());
-                eventoAModificar.setOrganizador((Organizador) vista.organizadorComboBox.getSelectedItem());
-                eventoAModificar.setPrecio(Float.parseFloat(vista.precioEventoTxt.getText()));
-                modelo.modificarEvento(eventoAModificar);
-                break;
-            case "EliminarEvento":
-                Evento eventoEliminar = vista.listEventos.getSelectedValue();
-                modelo.eliminarEvento(eventoEliminar);
-                break;
-            case "NuevoUsuario":
-                Usuario usuarioAinsertar = new Usuario(vista.nombreUsuarioTxt.getText(), vista.apellidosUsuarioTxt.getText(),
-                        vista.emailUsuarioTxt.getText(), Date.valueOf(vista.usuarioDPicker.getDate()));
-                modelo.guardarUsuario(usuarioAinsertar);
-                break;
-            case "ModificarUsuario":
-                Usuario usuarioAModificar = vista.listUsuarios.getSelectedValue();
-                usuarioAModificar.setNombre(vista.nombreUsuarioTxt.getText());
-                usuarioAModificar.setApellidos(vista.apellidosUsuarioTxt.getText());
-                usuarioAModificar.setEmail(vista.emailUsuarioTxt.getText());
-                modelo.modificarUsuario(usuarioAModificar);
-                break;
-            case "EliminarUsuario":
-                Usuario usuarioEliminar = vista.listUsuarios.getSelectedValue();
-                modelo.eliminarUsuario(usuarioEliminar);
-                break;
-            case "NuevoOrganizador":
-                Organizador organizadorAInsertar = new Organizador(vista.nombreOrganizadorTxt.getText(), vista.apellidosOrganizadorTxt.getText(),
-                        vista.telefonoOrganizadorTxt.getText(), vista.emailOrganizadorTxt.getText());
-                modelo.guardarOrganizador(organizadorAInsertar);
-                break;
-            case "ModificarOrganizador":
-                Organizador organizadorAModificar = vista.listOrganizadores.getSelectedValue();
-                organizadorAModificar.setNombre(vista.nombreOrganizadorTxt.getText());
-                organizadorAModificar.setApellidos(vista.apellidosOrganizadorTxt.getText());
-                organizadorAModificar.setTelefono(vista.telefonoOrganizadorTxt.getText());
-                organizadorAModificar.setEmail(vista.emailOrganizadorTxt.getText());
-                modelo.modificarOrganizador(organizadorAModificar);
-                break;
-            case "EliminarOrganizador":
-                Organizador organizadorEliminar = vista.listOrganizadores.getSelectedValue();
-                organizadorEliminar.desvincularEventos();
-                modelo.eliminarOrganizador(organizadorEliminar);
-                break;
-            case "NuevaInscripcion":
-                Inscripcion inscripcionAInsertar = new Inscripcion(Date.valueOf(vista.inscripcionDPicker.getDate()),
-                        vista.estadoComboBox.getSelectedItem().toString(),
-                        (Evento) vista.eventoInscripcionComboBox.getSelectedItem(),
-                        (Usuario) vista.usuarioInscripcionComboBox.getSelectedItem());
-                modelo.guardarInscripcion(inscripcionAInsertar);
-                break;
-            case "ModificarInscripcion":
-                Inscripcion inscripcionAModificar = vista.listInscripciones.getSelectedValue();
-                inscripcionAModificar.setEstado(vista.estadoComboBox.getSelectedItem().toString());
-                inscripcionAModificar.setEvento((Evento) vista.eventoInscripcionComboBox.getSelectedItem());
-                inscripcionAModificar.setUsuario((Usuario) vista.usuarioInscripcionComboBox.getSelectedItem());
-                modelo.modificarInscripcion(inscripcionAModificar);
-                break;
-            case "InscribirUsuario":
-                break;
-            case "EliminarInscripcion":
-                Inscripcion inscripcionEliminar = vista.listInscripciones.getSelectedValue();
-                modelo.eliminarInscripcion(inscripcionEliminar);
-                break;
-            case "NuevaValoracion":
-                Valoracion valoracionAInsertar = new Valoracion(
-                        (Usuario) vista.usuarioValoracionCombo.getSelectedItem(),
-                        (Evento) vista.eventoValoracionCombo.getSelectedItem(),
-                        (Organizador) vista.organaizadorValoracionCombo.getSelectedItem(),
-                        Integer.parseInt(vista.puntuacionValoracionTxt.getText()),
-                        vista.comentarioValoracionTxt.getText()
-                );
-                modelo.guardarValoracion(valoracionAInsertar);
-                break;
-            case "EliminarValoracion":
-                Valoracion valoracionAEliminar = vista.listValoraciones.getSelectedValue();
-                modelo.eliminarValoracion(valoracionAEliminar);
-                break;
-            case "Conectar":
-                vista.conexionItem.setEnabled(false);
-                modelo.conectar();
-                break;
-            case "Salir":
-                int resp = Util.showConfirmDialog("¿Desea salir de la aplicación?", "Salir");
-                if (resp == JOptionPane.OK_OPTION) {
-                    System.exit(0);
-                }
-                return;
-            default:
-                break;
-        }
-
         try {
+            switch (comando) {
+                case "NuevoEvento":
+                    Evento eventoAInsertar = new Evento(vista.nombreEventoTxt.getText(), String.valueOf(vista.eventoComboBox.getSelectedItem()),
+                            Date.valueOf(vista.eventoDPicker.getDate()), Float.parseFloat(vista.precioEventoTxt.getText()),
+                            (Organizador) vista.organizadorComboBox.getSelectedItem());
+                    modelo.guardarEvento(eventoAInsertar);
+                    break;
+
+                case "ModificarEvento":
+                    Evento eventoAModificar = vista.listEventos.getSelectedValue();
+                    eventoAModificar.setNombre(vista.nombreEventoTxt.getText());
+                    eventoAModificar.setOrganizador((Organizador) vista.organizadorComboBox.getSelectedItem());
+                    eventoAModificar.setPrecio(Float.parseFloat(vista.precioEventoTxt.getText()));
+                    modelo.modificarEvento(eventoAModificar);
+                    break;
+
+                case "EliminarEvento":
+                    Evento eventoEliminar = vista.listEventos.getSelectedValue();
+                    modelo.eliminarEvento(eventoEliminar);
+                    break;
+
+                case "NuevoUsuario":
+                    Usuario usuarioAinsertar = new Usuario(vista.nombreUsuarioTxt.getText(), vista.apellidosUsuarioTxt.getText(),
+                            vista.emailUsuarioTxt.getText(), Date.valueOf(vista.usuarioDPicker.getDate()));
+                    try {
+                        modelo.guardarUsuario(usuarioAinsertar);
+                    } catch (Exception e) {
+                        Util.showErrorAlert("El email introducido ya existe");
+                        return;
+                    }
+                    break;
+
+                case "ModificarUsuario":
+                    Usuario usuarioAModificar = vista.listUsuarios.getSelectedValue();
+                    usuarioAModificar.setNombre(vista.nombreUsuarioTxt.getText());
+                    usuarioAModificar.setApellidos(vista.apellidosUsuarioTxt.getText());
+                    usuarioAModificar.setEmail(vista.emailUsuarioTxt.getText());
+                    modelo.modificarUsuario(usuarioAModificar);
+                    break;
+
+                case "EliminarUsuario":
+                    Usuario usuarioEliminar = vista.listUsuarios.getSelectedValue();
+                    modelo.eliminarUsuario(usuarioEliminar);
+                    break;
+
+                case "NuevoOrganizador":
+                    Organizador organizadorAInsertar = new Organizador(vista.nombreOrganizadorTxt.getText(), vista.apellidosOrganizadorTxt.getText(),
+                            vista.telefonoOrganizadorTxt.getText(), vista.emailOrganizadorTxt.getText());
+                    modelo.guardarOrganizador(organizadorAInsertar);
+                    break;
+
+                case "ModificarOrganizador":
+                    Organizador organizadorAModificar = vista.listOrganizadores.getSelectedValue();
+                    organizadorAModificar.setNombre(vista.nombreOrganizadorTxt.getText());
+                    organizadorAModificar.setApellidos(vista.apellidosOrganizadorTxt.getText());
+                    organizadorAModificar.setTelefono(vista.telefonoOrganizadorTxt.getText());
+                    organizadorAModificar.setEmail(vista.emailOrganizadorTxt.getText());
+                    modelo.modificarOrganizador(organizadorAModificar);
+                    break;
+
+                case "EliminarOrganizador":
+                    Organizador organizadorEliminar = vista.listOrganizadores.getSelectedValue();
+                    organizadorEliminar.desvincularEventos();
+                    modelo.eliminarOrganizador(organizadorEliminar);
+                    break;
+
+                case "NuevaInscripcion":
+                    Inscripcion inscripcionAInsertar = new Inscripcion(Date.valueOf(vista.inscripcionDPicker.getDate()),
+                            vista.estadoComboBox.getSelectedItem().toString(),
+                            (Evento) vista.eventoInscripcionComboBox.getSelectedItem(),
+                            (Usuario) vista.usuarioInscripcionComboBox.getSelectedItem());
+                    modelo.guardarInscripcion(inscripcionAInsertar);
+                    break;
+
+                case "ModificarInscripcion":
+                    Inscripcion inscripcionAModificar = vista.listInscripciones.getSelectedValue();
+                    inscripcionAModificar.setEstado(vista.estadoComboBox.getSelectedItem().toString());
+                    inscripcionAModificar.setEvento((Evento) vista.eventoInscripcionComboBox.getSelectedItem());
+                    inscripcionAModificar.setUsuario((Usuario) vista.usuarioInscripcionComboBox.getSelectedItem());
+                    modelo.modificarInscripcion(inscripcionAModificar);
+                    break;
+
+                case "EliminarInscripcion":
+                    Inscripcion inscripcionEliminar = vista.listInscripciones.getSelectedValue();
+                    modelo.eliminarInscripcion(inscripcionEliminar);
+                    break;
+
+                case "NuevaValoracion":
+                    int puntuacion = Integer.parseInt(vista.puntuacionValoracionTxt.getText());
+
+                    if (puntuacion < 1 || puntuacion > 5) {
+                        Util.showErrorAlert("La puntuacion debe estar entre 1 y 5");
+                        return;
+                    }
+                    Valoracion valoracionAInsertar = new Valoracion(
+                            (Usuario) vista.usuarioValoracionCombo.getSelectedItem(),
+                            (Evento) vista.eventoValoracionCombo.getSelectedItem(),
+                            (Organizador) vista.organaizadorValoracionCombo.getSelectedItem(),
+                            Integer.parseInt(vista.puntuacionValoracionTxt.getText()),
+                            vista.comentarioValoracionTxt.getText()
+                    );
+                    modelo.guardarValoracion(valoracionAInsertar);
+                    break;
+
+                case "ModificarValoracion":
+                    Valoracion valoracionAModificar = vista.listValoraciones.getSelectedValue();
+                    valoracionAModificar.setUsuario((Usuario) vista.usuarioValoracionCombo.getSelectedItem());
+                    valoracionAModificar.setEvento((Evento) vista.eventoValoracionCombo.getSelectedItem());
+                    valoracionAModificar.setOrganizador((Organizador) vista.organaizadorValoracionCombo.getSelectedItem());
+                    valoracionAModificar.setPuntuacion(Integer.parseInt(vista.puntuacionValoracionTxt.getText()));
+                    valoracionAModificar.setComentario(vista.comentarioValoracionTxt.getText());
+                    modelo.modificarValoracion(valoracionAModificar);
+                    break;
+
+                case "EliminarValoracion":
+                    Valoracion valoracionAEliminar = vista.listValoraciones.getSelectedValue();
+                    modelo.eliminarValoracion(valoracionAEliminar);
+                    break;
+                case "DesinscribirUsuario":
+                    Usuario usuarioDesinscribir = vista.listUsuarios.getSelectedValue();
+                    Evento eventoDesinscribir = vista.listInscripcionesUsuario.getSelectedValue();
+                    Inscripcion inscripcionADesinscibir = eventoDesinscribir.getInscripcion(usuarioDesinscribir);
+                    modelo.eliminarInscripcion(inscripcionADesinscibir);
+                    break;
+                case "InscribirUsuario":
+                    Usuario usuarioInscribir = vista.listUsuariosDisponiblesPorEvento.getSelectedValue();
+                    Evento eventoInscribir = vista.listEventos.getSelectedValue();
+                    Inscripcion inscripcionAInscribir = new Inscripcion(Date.valueOf(LocalDate.now()),
+                            "Pendiente", eventoInscribir, usuarioInscribir);
+                    modelo.guardarInscripcion(inscripcionAInscribir);
+                    break;
+                case "DesinscribirUsuarioEvento":
+                    Usuario usuarioDesinscribirEvento = vista.listUsuariosEvento.getSelectedValue();
+                    Evento eventoDesinscribirEvento = vista.listEventos.getSelectedValue();
+                    Inscripcion inscripcionADesinscibirEvento = eventoDesinscribirEvento.getInscripcion(usuarioDesinscribirEvento);
+                    modelo.eliminarInscripcion(inscripcionADesinscibirEvento);
+                    break;
+                case "DesvincularOrganizador":
+                    Evento eventoDesvincular = vista.listEventosOrganizador.getSelectedValue();
+                    modelo.desvincularOrganizador(eventoDesvincular);
+                    break;
+                case "AsignarOrganizador":
+                    Evento eventoAsignar = vista.listEventosDisponiblesOrganizador.getSelectedValue();
+                    Organizador organizadorAsignar = vista.listOrganizadores.getSelectedValue();
+                    modelo.asignarOrganizador(eventoAsignar, organizadorAsignar);
+                    break;
+                case "Conectar":
+                    vista.conexionItem.setEnabled(false);
+                    modelo.conectar();
+                    break;
+
+                case "Salir":
+                    int resp = Util.showConfirmDialog("¿Desea salir de la aplicación?", "Salir");
+                    if (resp == JOptionPane.OK_OPTION) {
+                        System.exit(0);
+                    }
+                    return;
+
+                default:
+                    break;
+            }
+
+            // Refrescar las secciones después de la acción
             refrescarSeccionEventos();
             refrescarSeccionUsuarios();
             refrescarSeccionOrganizadores();
             refrescarSeccionInscripciones();
             refrescarSeccionValoraciones();
+
         } catch (Exception e) {
-            System.out.println("Cargando datos");
+            HibernateUtil.getCurrentSession().getTransaction().rollback();
         }
     }
 
@@ -210,22 +294,6 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         vista.dlmUsuarios.clear();
         for(Usuario usuario : usuarios){
             vista.dlmUsuarios.addElement(usuario);
-        }
-    }
-
-    private void listarUsuariosPorEvento(Evento evento){
-        List<Inscripcion> inscripciones = evento.getInscripciones();
-        vista.dlmUsuariosEvento.clear();
-        for(Inscripcion inscripcion : inscripciones){
-            vista.dlmUsuariosEvento.addElement(inscripcion.getUsuario());
-        }
-    }
-
-    private void listarEventosDisponiblePorUsuario(Usuario usuario){
-        List<Evento> eventos = modelo.obtenerEventosDisponiblesPorUsuario(usuario);
-        vista.dlmEventosUsuario.clear();
-        for(Evento evento : eventos){
-            vista.dlmEventosUsuario.addElement(evento);
         }
     }
 
@@ -380,12 +448,18 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         vista.dlmUsuariosDisponiblesPorEvento.clear();
     }
 
+    private void clearDLMOrganizador() {
+        vista.dlmUsuariosDisponiblesPorEvento.clear();
+        vista.dlmEventosDisponiblesOrganizador.clear();
+    }
+
     private void refrescarSeccionOrganizadores() {
         vista.nombreOrganizadorTxt.setText("");
         vista.apellidosOrganizadorTxt.setText("");
         vista.telefonoOrganizadorTxt.setText("");
         vista.emailOrganizadorTxt.setText("");
         listarOrganizadores();
+        clearDLMOrganizador();
     }
 
     private void refrescarSeccionInscripciones() {
@@ -462,6 +536,15 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
             vista.usuarioInscripcionComboBox.setSelectedItem(inscripcion.getUsuario());
             vista.inscripcionDPicker.setDate(inscripcion.getFechaInscripcion().toLocalDate());
             vista.estadoComboBox.setSelectedItem(inscripcion.getEstado());
+        }
+        // Si la lista de valoraciones cambia de selección
+        else if(listSelectionEvent.getSource() == vista.listValoraciones && vista.listValoraciones.getSelectedValue() != null){
+            Valoracion valoracion = vista.listValoraciones.getSelectedValue();
+            vista.usuarioValoracionCombo.setSelectedItem(valoracion.getUsuario());
+            vista.eventoValoracionCombo.setSelectedItem(valoracion.getEvento());
+            vista.organaizadorValoracionCombo.setSelectedItem(valoracion.getOrganizador());
+            vista.puntuacionValoracionTxt.setText(String.valueOf(valoracion.getPuntuacion()));
+            vista.comentarioValoracionTxt.setText(valoracion.getComentario());
         }
     }
 

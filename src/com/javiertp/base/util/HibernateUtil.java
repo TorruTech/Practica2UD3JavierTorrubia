@@ -9,8 +9,8 @@ import org.hibernate.service.ServiceRegistry;
 
 public class HibernateUtil {
 
-  private static SessionFactory sessionFactory;
-  private static Session session;
+  public static SessionFactory sessionFactory;
+  public static Session session;
 	
   /**
    * Crea la factoria de sesiones

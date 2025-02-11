@@ -147,7 +147,7 @@
                 </constraints>
                 <properties>
                   <actionCommand value="DesmatricularAlumno"/>
-                  <text value="Desinscribir"/>
+                  <text value="Desapuntar"/>
                 </properties>
               </component>
               <component id="5c5cc" class="javax.swing.JLabel">
@@ -567,7 +567,7 @@
                 </constraints>
                 <properties>
                   <actionCommand value="DesvincularAsignatura"/>
-                  <text value="Desvincular:"/>
+                  <text value="Desvincular"/>
                 </properties>
               </component>
               <component id="d3fd" class="javax.swing.JButton" binding="asignarEventoOrganizadorBtn">
@@ -577,7 +577,7 @@
                 </constraints>
                 <properties>
                   <actionCommand value="AsignarAsignatura"/>
-                  <text value="Asignar:"/>
+                  <text value="Asignar"/>
                 </properties>
               </component>
               <grid id="8aec5" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
