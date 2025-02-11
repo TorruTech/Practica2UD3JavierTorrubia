@@ -18,5 +18,6 @@
         <mapping class="com.javiertp.base.Inscripcion"/>
         <mapping class="com.javiertp.base.Organizador"/>
         <mapping class="com.javiertp.base.Usuario"/>
+        <mapping class="com.javiertp.base.Valoracion"/>
     </session-factory>
 </hibernate-configuration>

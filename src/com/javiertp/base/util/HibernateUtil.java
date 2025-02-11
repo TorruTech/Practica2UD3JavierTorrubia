@@ -1,9 +1,6 @@
 package com.javiertp.base.util;
 
-import com.javiertp.base.Evento;
-import com.javiertp.base.Inscripcion;
-import com.javiertp.base.Organizador;
-import com.javiertp.base.Usuario;
+import com.javiertp.base.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -29,6 +26,7 @@ public class HibernateUtil {
     configuration.addAnnotatedClass(Inscripcion.class);
     configuration.addAnnotatedClass(Organizador.class);
     configuration.addAnnotatedClass(Usuario.class);
+    configuration.addAnnotatedClass(Valoracion.class);
 
     //Se crea una SessionFactory a partir del objeto Configuration
     ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(

@@ -1,9 +1,6 @@
 package com.javiertp.base.mvc;
 
-import com.javiertp.base.Evento;
-import com.javiertp.base.Usuario;
-import com.javiertp.base.Organizador;
-import com.javiertp.base.Inscripcion;
+import com.javiertp.base.*;
 import com.javiertp.base.util.Util;
 
 import java.awt.event.*;
@@ -32,6 +29,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
             refrescarSeccionUsuarios();
             refrescarSeccionOrganizadores();
             refrescarSeccionInscripciones();
+            refrescarSeccionValoraciones();
         } catch (Exception e) {
             System.out.println("Inicializando el programa");
         }
@@ -85,6 +83,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         vista.listUsuarios.addListSelectionListener(listener);
         vista.listOrganizadores.addListSelectionListener(listener);
         vista.listInscripciones.addListSelectionListener(listener);
+        vista.listValoraciones.addListSelectionListener(listener);
     }
 
     private void addWindowListener(WindowListener listener){
@@ -167,6 +166,20 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                 Inscripcion inscripcionEliminar = vista.listInscripciones.getSelectedValue();
                 modelo.eliminarInscripcion(inscripcionEliminar);
                 break;
+            case "NuevaValoracion":
+                Valoracion valoracionAInsertar = new Valoracion(
+                        (Usuario) vista.usuarioValoracionCombo.getSelectedItem(),
+                        (Evento) vista.eventoValoracionCombo.getSelectedItem(),
+                        (Organizador) vista.organaizadorValoracionCombo.getSelectedItem(),
+                        Integer.parseInt(vista.puntuacionValoracionTxt.getText()),
+                        vista.comentarioValoracionTxt.getText()
+                );
+                modelo.guardarValoracion(valoracionAInsertar);
+                break;
+            case "EliminarValoracion":
+                Valoracion valoracionAEliminar = vista.listValoraciones.getSelectedValue();
+                modelo.eliminarValoracion(valoracionAEliminar);
+                break;
             case "Conectar":
                 vista.conexionItem.setEnabled(false);
                 modelo.conectar();
@@ -186,6 +199,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
             refrescarSeccionUsuarios();
             refrescarSeccionOrganizadores();
             refrescarSeccionInscripciones();
+            refrescarSeccionValoraciones();
         } catch (Exception e) {
             System.out.println("Cargando datos");
         }
@@ -271,6 +285,14 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    private void listarValoraciones(){
+        List<Valoracion> valoraciones = modelo.obtenerValoraciones();
+        vista.dlmValoraciones.clear();
+        for(Valoracion valoracion : valoraciones){
+            vista.dlmValoraciones.addElement(valoracion);
+        }
+    }
+
     private void listarEventosDisponiblesPorOrganizador(Organizador organizador){
         List<Evento> eventos = modelo.obtenerEventosDisponiblesPorOrganizador(organizador);
         vista.dlmEventosDisponiblesOrganizador.clear();
@@ -292,6 +314,30 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         vista.dcbUsuariosInscripcion.removeAllElements();
         for(Usuario usuario : usuarios){
             vista.dcbUsuariosInscripcion.addElement(usuario);
+        }
+    }
+
+    private void listarUsuariosValoraciones(){
+        List<Usuario> usuarios = modelo.obtenerUsuarios();
+        vista.dcbUsuarioValoracion.removeAllElements();
+        for(Usuario usuario : usuarios){
+            vista.dcbUsuarioValoracion.addElement(usuario);
+        }
+    }
+
+    private void listarEventosValoraciones(){
+        List<Evento> eventos = modelo.obtenerEventos();
+        vista.dcbEventoValoracion.removeAllElements();
+        for(Evento evento : eventos){
+            vista.dcbEventoValoracion.addElement(evento);
+        }
+    }
+
+    private void listarOrganizadoresValoraciones(){
+        List<Organizador> organizadores = modelo.obtenerOrganizadores();
+        vista.dcbOrganizadorValoracion.removeAllElements();
+        for(Organizador organizador : organizadores){
+            vista.dcbOrganizadorValoracion.addElement(organizador);
         }
     }
 
@@ -354,6 +400,18 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
 
         // resetear los dlm de EventosUsuario, UsuariosEvento, UsuariosDisponiblesEvento
         resetearDLMs();
+    }
+
+    private void refrescarSeccionValoraciones() {
+        vista.usuarioValoracionCombo.setSelectedIndex(-1);
+        vista.eventoValoracionCombo.setSelectedIndex(-1);
+        vista.organaizadorValoracionCombo.setSelectedIndex(-1);
+        vista.puntuacionValoracionTxt.setText("");
+        vista.comentarioValoracionTxt.setText("");
+        listarValoraciones();
+        listarUsuariosValoraciones();
+        listarEventosValoraciones();
+        listarOrganizadoresValoraciones();
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.javiertp.base;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "valoraciones")
+@Table(name = "valoraciones", schema = "eventoshibernate", catalog = "")
 public class Valoracion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

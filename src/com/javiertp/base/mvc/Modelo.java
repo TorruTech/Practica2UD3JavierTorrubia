@@ -1,9 +1,6 @@
 package com.javiertp.base.mvc;
 
-import com.javiertp.base.Evento;
-import com.javiertp.base.Usuario;
-import com.javiertp.base.Organizador;
-import com.javiertp.base.Inscripcion;
+import com.javiertp.base.*;
 import com.javiertp.base.util.HibernateUtil;
 
 import java.util.ArrayList;
@@ -39,6 +36,11 @@ public class Modelo {
     // Obtener todos las inscripciones
     public List<Inscripcion> obtenerInscripciones() {
         return HibernateUtil.getCurrentSession().createQuery("FROM Inscripcion").getResultList();
+    }
+
+    // Obtener todas las valoraciones
+    public List<Valoracion> obtenerValoraciones() {
+        return HibernateUtil.getCurrentSession().createQuery("FROM Valoracion").getResultList();
     }
 
     // Obtener inscripciones de un usuario
@@ -85,6 +87,13 @@ public class Modelo {
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 
+    // Guardar o actualizar una valoracion
+    public void guardarValoracion(Valoracion valoracion) {
+        HibernateUtil.getCurrentSession().beginTransaction();
+        HibernateUtil.getCurrentSession().saveOrUpdate(valoracion);
+        HibernateUtil.getCurrentSession().getTransaction().commit();
+    }
+
     //Modificar un usuario
     public void modificarUsuario(Usuario usuario) {
         HibernateUtil.getCurrentSession().beginTransaction();
@@ -113,6 +122,13 @@ public class Modelo {
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 
+    //Modificar una valoracion
+    public void modificarValoracion(Valoracion valoracion) {
+        HibernateUtil.getCurrentSession().beginTransaction();
+        HibernateUtil.getCurrentSession().update(valoracion);
+        HibernateUtil.getCurrentSession().getTransaction().commit();
+    }
+
     // Eliminar un usuario
     public void eliminarUsuario(Usuario usuario) {
         HibernateUtil.getCurrentSession().beginTransaction();
@@ -138,6 +154,13 @@ public class Modelo {
     public void eliminarInscripcion(Inscripcion inscripcion) {
         HibernateUtil.getCurrentSession().beginTransaction();
         HibernateUtil.getCurrentSession().delete(inscripcion);
+        HibernateUtil.getCurrentSession().getTransaction().commit();
+    }
+
+    // Eliminar una valoracion
+    public void eliminarValoracion(Valoracion valoracion) {
+        HibernateUtil.getCurrentSession().beginTransaction();
+        HibernateUtil.getCurrentSession().delete(valoracion);
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 
