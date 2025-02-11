@@ -6,7 +6,9 @@ import com.javiertp.base.Organizador;
 import com.javiertp.base.Inscripcion;
 import com.javiertp.base.util.HibernateUtil;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Modelo {
 
@@ -138,5 +140,43 @@ public class Modelo {
         HibernateUtil.getCurrentSession().delete(inscripcion);
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
+
+    public List<Evento> obtenerEventosDisponiblesPorUsuario(Usuario usuario) {
+        // Obtener todos los eventos disponibles para el usuario
+        List<Evento> eventos = new ArrayList<>(obtenerEventos());
+
+        List<Evento> eventosInscritos = usuario.getInscripciones().stream()
+                .map(Inscripcion::getEvento)
+                .collect(Collectors.toList());
+
+        eventos.removeAll(eventosInscritos);
+        return eventos;
+    }
+
+    public List<Usuario> obtenerUsuariosDisponiblesPorEvento(Evento evento) {
+        // Obtener todos los usuarios registrados
+        List<Usuario> usuarios = obtenerUsuarios();
+
+        // Obtener los usuarios inscritos al evento desde la base de datos
+        List<Usuario> usuariosInscritos = HibernateUtil.getCurrentSession()
+                .createQuery("SELECT i.usuario FROM Inscripcion i WHERE i.evento = :evento", Usuario.class)
+                .setParameter("evento", evento)
+                .getResultList();
+
+        // Filtrar los usuarios no inscritos
+        usuarios.removeAll(usuariosInscritos);
+        return usuarios;
+    }
+
+    public List<Evento> obtenerEventosDisponiblesPorOrganizador(Organizador organizador) {
+        // Obtener todos los eventos disponibles para el organizador
+        List<Evento> eventos = new ArrayList<>(obtenerEventos());
+
+        List<Evento> eventosOrganizador = organizador.getEventos();
+
+        eventos.removeAll(eventosOrganizador);
+        return eventos;
+    }
+
 
 }

@@ -64,20 +64,20 @@ public class Vista {
     JList<Evento> listInscripcionesUsuario;
     JList<Evento> listEventos;
     JList<Usuario> listUsuariosEvento;
-    JList<Evento> listUsuariosDisponibles;
+    JList<Usuario> listUsuariosDisponiblesPorEvento;
     JList<Organizador> listOrganizadores;
     JList<Evento> listEventosOrganizador;
-    JList<Organizador> listEventosDisponiblesOrganizador;
+    JList<Evento> listEventosDisponiblesOrganizador;
     JList<Inscripcion> listInscripciones;
 
     DefaultListModel<Usuario> dlmUsuarios;
     DefaultListModel<Evento> dlmEventosUsuario;
     DefaultListModel<Evento> dlmEventos;
     DefaultListModel<Usuario> dlmUsuariosEvento;
-    DefaultListModel<Evento> dlmUsuariosDisponibles;
+    DefaultListModel<Usuario> dlmUsuariosDisponiblesPorEvento;
     DefaultListModel<Organizador> dlmOrganizadores;
     DefaultListModel<Evento> dlmEventosOrganizador;
-    DefaultListModel<Organizador> dlmEventosDisponiblesOrganizador;
+    DefaultListModel<Evento> dlmEventosDisponiblesOrganizador;
     DefaultListModel<Inscripcion> dlmInscripciones;
 
     DefaultComboBoxModel<Organizador> dcbOrganizadorEvento;
@@ -113,8 +113,8 @@ public class Vista {
         dlmUsuariosEvento = new DefaultListModel<>();
         listUsuariosEvento.setModel(dlmUsuariosEvento);
 
-        dlmUsuariosDisponibles = new DefaultListModel<>();
-        listUsuariosDisponibles.setModel(dlmUsuariosDisponibles);
+        dlmUsuariosDisponiblesPorEvento = new DefaultListModel<Usuario>();
+        listUsuariosDisponiblesPorEvento.setModel(dlmUsuariosDisponiblesPorEvento);
 
         dlmOrganizadores = new DefaultListModel<>();
         listOrganizadores.setModel(dlmOrganizadores);

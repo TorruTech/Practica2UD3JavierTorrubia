@@ -279,7 +279,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="5f80c" class="javax.swing.JList" binding="listUsuariosDisponibles">
+                  <component id="5f80c" class="javax.swing.JList" binding="listUsuariosDisponiblesPorEvento">
                     <constraints/>
                     <properties/>
                   </component>

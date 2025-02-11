@@ -8,9 +8,7 @@ import com.javiertp.base.util.Util;
 
 import java.awt.event.*;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.Set;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -203,6 +201,14 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    private void listarEventosDisponiblePorUsuario(Usuario usuario){
+        List<Evento> eventos = modelo.obtenerEventosDisponiblesPorUsuario(usuario);
+        vista.dlmEventosUsuario.clear();
+        for(Evento evento : eventos){
+            vista.dlmEventosUsuario.addElement(evento);
+        }
+    }
+
     private void listarEventos(){
         List<Evento> eventos = modelo.obtenerEventos();
         vista.dlmEventos.clear();
@@ -228,10 +234,26 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
     }
 
     private void listarInscripcionesPorUsuario(Usuario usuario){
-        List<Inscripcion> inscripciones = usuario.getInscripciones();
+        List<Inscripcion> inscripciones = modelo.obtenerInscripcionesPorUsuario(usuario);
         vista.dlmEventosUsuario.clear();
         for(Inscripcion inscripcion : inscripciones){
             vista.dlmEventosUsuario.addElement(inscripcion.getEvento());
+        }
+    }
+
+    private void listarInscripcionesPorEvento(Evento evento){
+        List<Inscripcion> inscripciones = modelo.obtenerInscripcionesPorEvento(evento);
+        vista.dlmUsuariosEvento.clear();
+        for(Inscripcion inscripcion : inscripciones){
+            vista.dlmUsuariosEvento.addElement(inscripcion.getUsuario());
+        }
+    }
+
+    private void listarUsuariosDisponiblesPorEvento(Evento evento){
+        List<Usuario> usuarios = modelo.obtenerUsuariosDisponiblesPorEvento(evento);
+        vista.dlmUsuariosDisponiblesPorEvento.clear();
+        for(Usuario usuario : usuarios){
+            vista.dlmUsuariosDisponiblesPorEvento.addElement(usuario);
         }
     }
 
@@ -240,6 +262,14 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         vista.dlmOrganizadores.clear();
         for(Organizador organizador : organizadores){
             vista.dlmOrganizadores.addElement(organizador);
+        }
+    }
+
+    private void listarEventosDisponiblesPorOrganizador(Organizador organizador){
+        List<Evento> eventos = modelo.obtenerEventosDisponiblesPorOrganizador(organizador);
+        vista.dlmEventosDisponiblesOrganizador.clear();
+        for(Evento evento : eventos){
+            vista.dlmEventosDisponiblesOrganizador.addElement(evento);
         }
     }
 
@@ -277,6 +307,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         vista.listEventos.clearSelection();
         listarEventos();
         listarOrganizadoresEvento();
+        clearDLMEvento();
     }
 
     private void refrescarSeccionUsuarios() {
@@ -285,6 +316,16 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         vista.emailUsuarioTxt.setText("");
         vista.usuarioDPicker.setText("");
         listarUsuarios();
+        clearDLMUsuario();
+    }
+
+    private void clearDLMUsuario() {
+        vista.dlmEventosUsuario.clear();
+    }
+
+    private void clearDLMEvento() {
+        vista.dlmUsuariosEvento.clear();
+        vista.dlmUsuariosDisponiblesPorEvento.clear();
     }
 
     private void refrescarSeccionOrganizadores() {
@@ -304,6 +345,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         listarInscripciones();
         listarEventosInscripcion();
         listarUsuariosInscripcion();
+
+        // resetear los dlm de EventosUsuario, UsuariosEvento, UsuariosDisponiblesEvento
+        resetearDLMs();
     }
 
     @Override
@@ -325,7 +369,8 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
             vista.organizadorComboBox.setSelectedItem(evento.getOrganizador());
             vista.eventoDPicker.setDate(evento.getFechaInicio().toLocalDate());
             vista.precioEventoTxt.setText(String.valueOf(evento.getPrecio()));
-            listarUsuariosPorEvento(evento);
+            listarInscripcionesPorEvento(evento);
+            listarUsuariosDisponiblesPorEvento(evento);
         }
         // Si la lista de usuarios cambia de selección
         else if(listSelectionEvent.getSource() == vista.listUsuarios && vista.listUsuarios.getSelectedValue() != null){
@@ -344,6 +389,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
             vista.telefonoOrganizadorTxt.setText(organizador.getTelefono());
             vista.emailOrganizadorTxt.setText(organizador.getEmail());
             listarEventosPorOrganizador(organizador);
+            listarEventosDisponiblesPorOrganizador(organizador);
         }
         // Si la lista de inscripciones cambia de selección
         else if(listSelectionEvent.getSource() == vista.listInscripciones && vista.listInscripciones.getSelectedValue() != null){
@@ -352,7 +398,13 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
             vista.usuarioInscripcionComboBox.setSelectedItem(inscripcion.getUsuario());
             vista.inscripcionDPicker.setDate(inscripcion.getFechaInscripcion().toLocalDate());
             vista.estadoComboBox.setSelectedItem(inscripcion.getEstado());
-
         }
     }
+
+    private void resetearDLMs() {
+        vista.dlmUsuariosEvento.clear();
+        vista.dlmEventosUsuario.clear();
+        vista.dlmUsuariosDisponiblesPorEvento.clear();
+    }
+
 }
