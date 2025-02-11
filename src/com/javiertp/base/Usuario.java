@@ -93,7 +93,7 @@ public class Usuario {
         return Objects.hash(id, nombre, apellidos, email, fechaRegistro);
     }
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<Inscripcion> getInscripciones() {
         return inscripciones;
     }

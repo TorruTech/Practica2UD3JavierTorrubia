@@ -95,7 +95,7 @@ public class Evento {
         return Objects.hash(id, nombre, ubicacion, fechaInicio, precio);
     }
 
-    @OneToMany(mappedBy = "evento")
+    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<Inscripcion> getInscripciones() {
         return inscripciones;
     }
