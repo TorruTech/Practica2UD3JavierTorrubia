@@ -11,36 +11,66 @@ import java.util.stream.Collectors;
 
 public class Modelo {
 
+
+    /**
+     * Establishes a connection to the database by building the session factory
+     * and opening a new session using Hibernate utilities.
+     */
     public void conectar() {
         HibernateUtil.buildSessionFactory();
         HibernateUtil.openSession();
     }
 
+    /**
+     * Closes the current session and destroys the session factory.
+     */
     public void desconectar() {
         HibernateUtil.closeSessionFactory();
     }
 
-    // Obtener todos los usuarios
+
+    /**
+     * Returns a list of all users in the database.
+     * @return list of all users in the database
+     */
     public List<Usuario> obtenerUsuarios() {
         return HibernateUtil.getCurrentSession().createQuery("FROM Usuario").getResultList();
     }
 
-    // Obtener todos los eventos
+
+    /**
+     * Retrieves a list of all events from the database.
+     *
+     * @return a list of Evento objects representing all events in the database
+     */
     public List<Evento> obtenerEventos() {
         return HibernateUtil.getCurrentSession().createQuery("FROM Evento").getResultList();
     }
 
-    // Obtener todos los organizadores
+
+    /**
+     * Retrieves a list of all Organizador objects from the database.
+     *
+     * @return a list of Organizador objects representing all organizers in the database
+     */
     public List<Organizador> obtenerOrganizadores() {
         return HibernateUtil.getCurrentSession().createQuery("FROM Organizador").getResultList();
     }
 
-    // Obtener todos las inscripciones
+    /**
+     * Retrieves a list of all {@link Inscripcion} objects from the database.
+     *
+     * @return a list of {@link Inscripcion} objects representing all inscriptions in the database
+     */
     public List<Inscripcion> obtenerInscripciones() {
         return HibernateUtil.getCurrentSession().createQuery("FROM Inscripcion").getResultList();
     }
 
-    // Obtener todas las valoraciones
+    /**
+     * Retrieves a list of all {@link Valoracion} objects from the database.
+     *
+     * @return a list of {@link Valoracion} objects representing all ratings in the database
+     */
     public List<Valoracion> obtenerValoraciones() {
         return HibernateUtil.getCurrentSession().createQuery("FROM Valoracion").getResultList();
     }
@@ -179,6 +209,12 @@ public class Modelo {
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 
+    /**
+     * Retrieves a list of users who are not registered for a given event.
+     *
+     * @param evento the event for which to find available users
+     * @return a list of Usuario objects representing users not registered for the specified event
+     */
     public List<Usuario> obtenerUsuariosDisponiblesPorEvento(Evento evento) {
         // Obtener todos los usuarios registrados
         List<Usuario> usuarios = obtenerUsuarios();
@@ -194,6 +230,12 @@ public class Modelo {
         return usuarios;
     }
 
+    /**
+     * Retrieves a list of events that are not already assigned to the given organizer.
+     *
+     * @param organizador the organizer for which to find available events
+     * @return a list of Evento objects representing events not already assigned to the specified organizer
+     */
     public List<Evento> obtenerEventosDisponiblesPorOrganizador(Organizador organizador) {
         // Obtener todos los eventos disponibles para el organizador
         List<Evento> eventos = obtenerEventos();
@@ -208,6 +250,11 @@ public class Modelo {
         return eventos;
     }
 
+    /**
+     * Removes the association between the given event and its associated organizer.
+     *
+     * @param eventoDesvincular the event to be disassociated from its current organizer
+     */
     public void desvincularOrganizador(Evento eventoDesvincular) {
         HibernateUtil.getCurrentSession().beginTransaction();
         eventoDesvincular.setOrganizador(null);
@@ -215,6 +262,13 @@ public class Modelo {
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 
+
+    /**
+     * Assigns the specified organizer to the given event.
+     *
+     * @param eventoAsignar the event to which the organizer will be assigned
+     * @param organizadorAsignar the organizer to be assigned to the event
+     */
     public void asignarOrganizador(Evento eventoAsignar, Organizador organizadorAsignar) {
         HibernateUtil.getCurrentSession().beginTransaction();
         eventoAsignar.setOrganizador(organizadorAsignar);
@@ -222,6 +276,12 @@ public class Modelo {
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 
+    /**
+     * Deletes the association between the given event and user.
+     *
+     * @param eventoDesinscribir the event from which the user will be disassociated
+     * @param usuarioDesinscribir the user to be disassociated from the event
+     */
     public void desapuntarUsuario(Evento eventoDesinscribir, Usuario usuarioDesinscribir) {
         HibernateUtil.getCurrentSession().beginTransaction();
         HibernateUtil.getCurrentSession().createQuery("DELETE FROM Inscripcion i WHERE i.evento = :evento AND i.usuario = :usuario")
@@ -231,6 +291,14 @@ public class Modelo {
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 
+    /**
+     * Registers a user to an event. The user is associated with the event as an {@link Inscripcion}, which is persisted to the database.
+     *
+     * @param eventoInscribir the event to which the user is being registered
+     * @param usuarioInscribir the user being registered to the event
+     * @param fechaInscripcion the date when the user registered to the event
+     * @param estado the state of the registration (e.g. "Pendiente", "Aceptado", etc.)
+     */
     public void inscribirUsuario(Evento eventoInscribir, Usuario usuarioInscribir, Date fechaInscripcion, String estado) {
         HibernateUtil.getCurrentSession().beginTransaction();
         Inscripcion inscripcion = new Inscripcion(fechaInscripcion, estado, eventoInscribir, usuarioInscribir);

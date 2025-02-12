@@ -12,11 +12,20 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+/**
+ * The type Controlador.
+ */
 public class Controlador extends WindowAdapter implements ActionListener, ListSelectionListener {
 
     private final Vista vista;
     private final Modelo modelo;
 
+    /**
+     * Instantiates a new Controlador.
+     *
+     * @param vista  the vista
+     * @param modelo the modelo
+     */
     public Controlador(Vista vista, Modelo modelo) {
 
         this.vista = vista;
@@ -48,7 +57,10 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
-    // Método para agregar los ActionListener
+    /**
+     * Metodo para agregar los ActionListener
+     * @param listener
+     */
     private void addActionListener(ActionListener listener){
         vista.nuevoEventoBtn.addActionListener(listener);
         vista.nuevoEventoBtn.setActionCommand("NuevoEvento");
@@ -95,7 +107,10 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         vista.conexionItem.addActionListener(listener);
     }
 
-    // Método para agregar los ListSelectionListener
+    /**
+     * Metodo para agregar los ListSelectionListener
+     * @param listener
+     */
     private void addListSelectionListener(ListSelectionListener listener){
         vista.listEventos.addListSelectionListener(listener);
         vista.listUsuarios.addListSelectionListener(listener);
@@ -104,10 +119,18 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         vista.listValoraciones.addListSelectionListener(listener);
     }
 
+    /**
+     * Metodo para agregar los WindowListener
+     * @param listener
+     */
     private void addWindowListener(WindowListener listener){
         vista.frame.addWindowListener(listener);
     }
 
+    /**
+     * Metodo para manejar los eventos
+     * @param actionEvent the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         String comando = actionEvent.getActionCommand();
@@ -281,6 +304,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    /**
+     * Lista los usuarios en la vista
+     */
     private void listarUsuarios(){
         List<Usuario> usuarios = modelo.obtenerUsuarios();
         vista.dlmUsuarios.clear();
@@ -289,6 +315,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    /**
+     * Lista los eventos en la vista
+     */
     private void listarEventos(){
         List<Evento> eventos = modelo.obtenerEventos();
         vista.dlmEventos.clear();
@@ -297,6 +326,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    /**
+     * Lista los eventos por organizador en la vista
+     *     */
     private void listarEventosPorOrganizador(Organizador organizador){
         List<Evento> eventos = modelo.obtenerEventosPorOrganizador(organizador);
         vista.dlmEventosOrganizador.clear();
@@ -305,6 +337,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    /** Lista las inscripciones en la vista
+     *
+     */
     private void listarInscripciones(){
         List<Inscripcion> inscripciones = modelo.obtenerInscripciones();
         vista.dlmInscripciones.clear();
@@ -313,6 +348,10 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    /**
+     * Lista las inscripciones por usuario
+     * @param usuario
+     */
     private void listarInscripcionesPorUsuario(Usuario usuario){
         List<Inscripcion> inscripciones = modelo.obtenerInscripcionesPorUsuario(usuario);
         vista.dlmEventosUsuario.clear();
@@ -321,6 +360,10 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    /**
+     * Lista las inscripciones por evento
+     * @param evento
+     */
     private void listarInscripcionesPorEvento(Evento evento){
         List<Inscripcion> inscripciones = modelo.obtenerInscripcionesPorEvento(evento);
         vista.dlmUsuariosEvento.clear();
@@ -329,6 +372,11 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+
+    /**
+     * Lista los usuarios disponibles para inscribirse en un evento.
+     * @param evento el evento para el que se quieren obtener los usuarios disponibles.
+     */
     private void listarUsuariosDisponiblesPorEvento(Evento evento){
         List<Usuario> usuarios = modelo.obtenerUsuariosDisponiblesPorEvento(evento);
         vista.dlmUsuariosDisponiblesPorEvento.clear();
@@ -337,6 +385,10 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+
+    /**
+     * Muestra en la vista todos los organizadores guardados en la base de datos.
+     *     */
     private void listarOrganizadores(){
         List<Organizador> organizadores = modelo.obtenerOrganizadores();
         vista.dlmOrganizadores.clear();
@@ -345,6 +397,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    /**
+     * lista las valoraciones
+     */
     private void listarValoraciones(){
         List<Valoracion> valoraciones = modelo.obtenerValoraciones();
         vista.dlmValoraciones.clear();
@@ -353,6 +408,12 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    /**
+     * Muestra en la vista todos los eventos disponibles para un organizador.
+     * Un evento est  disponible para un organizador si el organizador no
+     * est  asociado a ese evento.
+     * @param organizador el organizador para el que se quieren obtener los eventos disponibles.
+     */
     private void listarEventosDisponiblesPorOrganizador(Organizador organizador){
         List<Evento> eventos = modelo.obtenerEventosDisponiblesPorOrganizador(organizador);
         vista.dlmEventosDisponiblesOrganizador.clear();
@@ -361,6 +422,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    /**
+     * lista los eventos disponibles para inscribirse
+     */
     private void listarEventosInscripcion(){
         List<Evento> eventos = modelo.obtenerEventos();
         vista.dcbEventosInscripcion.removeAllElements();
@@ -369,6 +433,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    /**
+     * lista los usuarios disponibles para inscribirse
+     */
     private void listarUsuariosInscripcion(){
         List<Usuario> usuarios = modelo.obtenerUsuarios();
         vista.dcbUsuariosInscripcion.removeAllElements();
@@ -377,6 +444,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    /**
+     * lista los usuarios disponibles para inscribirse
+     */
     private void listarUsuariosValoraciones(){
         List<Usuario> usuarios = modelo.obtenerUsuarios();
         vista.dcbUsuarioValoracion.removeAllElements();
@@ -385,6 +455,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    /**
+     * lista los eventos disponibles para inscribirse
+     */
     private void listarEventosValoraciones(){
         List<Evento> eventos = modelo.obtenerEventos();
         vista.dcbEventoValoracion.removeAllElements();
@@ -393,6 +466,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    /**
+     * lista los organizadores disponibles para inscribirse
+     */
     private void listarOrganizadoresValoraciones(){
         List<Organizador> organizadores = modelo.obtenerOrganizadores();
         vista.dcbOrganizadorValoracion.removeAllElements();
@@ -401,6 +477,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    /**
+     * lista los organizadores disponibles para inscribirse
+     */
     private void listarOrganizadoresEvento() {
         List<Organizador> organizadores = modelo.obtenerOrganizadores();
         vista.dcbOrganizadorEvento.removeAllElements();
@@ -409,7 +488,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
-    // Métodos para refrescar la vista con datos actualizados (según el modelo)
+    /**
+     * refrescar la lista de eventos
+     */
     private void refrescarSeccionEventos() {
         vista.nombreEventoTxt.setText("");
         vista.eventoComboBox.setSelectedIndex(-1);
@@ -422,6 +503,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         clearDLMEvento();
     }
 
+    /**
+     * refrescar la lista de usuarios
+     */
     private void refrescarSeccionUsuarios() {
         vista.nombreUsuarioTxt.setText("");
         vista.apellidosUsuarioTxt.setText("");
@@ -431,6 +515,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         clearDLMUsuario();
     }
 
+    /**
+     * limpia la lista de eventos de un usuario
+     */
     private void clearDLMUsuario() {
         vista.dlmEventosUsuario.clear();
     }
@@ -468,6 +555,15 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         resetearDLMs();
     }
 
+
+    /**
+     * Refresca la sección de valoraciones en la interfaz de usuario con datos
+     * actualizados del modelo.
+     *
+     * Borra cualquier valor seleccionado en los combobox correspondientes y
+     * lista de nuevo las valoraciones, usuarios, eventos y organizadores
+     * disponibles para la valoración.
+     */
     private void refrescarSeccionValoraciones() {
         vista.usuarioValoracionCombo.setSelectedIndex(-1);
         vista.eventoValoracionCombo.setSelectedIndex(-1);
@@ -480,6 +576,12 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         listarOrganizadoresValoraciones();
     }
 
+    /**
+     * Handles the window closing event. Prompts the user with a confirmation dialog asking if they want to exit the application.
+     * If the user confirms, disconnects the model and exits the application.
+     *
+     * @param windowEvent the window event that triggers this method
+     */
     @Override
     public void windowClosing(WindowEvent windowEvent) {
         int resp = Util.showConfirmDialog("¿Desea salir de la aplicación?", "Salir");
@@ -489,6 +591,19 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    /**
+     * Handles the selection change events for various lists in the UI.
+     * Updates the corresponding UI components based on the new selection.
+     *
+     * @param listSelectionEvent the event that characterizes the change in selection.
+     *
+     * If the source of the event is:
+     * - `vista.listEventos`: Updates event-related fields and lists inscripciones and available users for the selected event.
+     * - `vista.listUsuarios`: Updates user-related fields and lists inscripciones for the selected user.
+     * - `vista.listOrganizadores`: Updates organizer-related fields and lists events and available events for the selected organizer.
+     * - `vista.listInscripciones`: Updates inscripcion-related fields.
+     * - `vista.listValoraciones`: Updates valoracion-related fields.
+     */
     @Override
     public void valueChanged(ListSelectionEvent listSelectionEvent) {
         // Si la lista de eventos cambia de selección
@@ -540,6 +655,12 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    /**
+     * Resetea los DefaultListModel de los JList de EventosUsuario, UsuariosEvento y
+     * UsuariosDisponiblesEvento. Esto es necesario hacerlo cada vez que se cambia de
+     * secci n en la interfaz gr fica para que no se sigan mostrando los datos de la
+     * secci n anterior.
+     */
     private void resetearDLMs() {
         vista.dlmUsuariosEvento.clear();
         vista.dlmEventosUsuario.clear();
