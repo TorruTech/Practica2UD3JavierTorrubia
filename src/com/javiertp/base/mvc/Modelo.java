@@ -3,6 +3,8 @@ package com.javiertp.base.mvc;
 import com.javiertp.base.*;
 import com.javiertp.base.util.HibernateUtil;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,6 +58,14 @@ public class Modelo {
         return HibernateUtil.getCurrentSession()
                 .createQuery("FROM Inscripcion WHERE evento = :evento")
                 .setParameter("evento", evento)
+                .getResultList();
+    }
+
+    // Obtener los eventos de un organizador
+    public List<Evento> obtenerEventosPorOrganizador(Organizador organizador) {
+        return HibernateUtil.getCurrentSession()
+                .createQuery("FROM Evento WHERE organizador = :organizador")
+                .setParameter("organizador", organizador)
                 .getResultList();
     }
 
@@ -169,18 +179,6 @@ public class Modelo {
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 
-    public List<Evento> obtenerEventosDisponiblesPorUsuario(Usuario usuario) {
-        // Obtener todos los eventos disponibles para el usuario
-        List<Evento> eventos = new ArrayList<>(obtenerEventos());
-
-        List<Evento> eventosInscritos = usuario.getInscripciones().stream()
-                .map(Inscripcion::getEvento)
-                .collect(Collectors.toList());
-
-        eventos.removeAll(eventosInscritos);
-        return eventos;
-    }
-
     public List<Usuario> obtenerUsuariosDisponiblesPorEvento(Evento evento) {
         // Obtener todos los usuarios registrados
         List<Usuario> usuarios = obtenerUsuarios();
@@ -198,10 +196,14 @@ public class Modelo {
 
     public List<Evento> obtenerEventosDisponiblesPorOrganizador(Organizador organizador) {
         // Obtener todos los eventos disponibles para el organizador
-        List<Evento> eventos = new ArrayList<>(obtenerEventos());
+        List<Evento> eventos = obtenerEventos();
 
-        List<Evento> eventosOrganizador = organizador.getEventos();
+        List<Evento> eventosOrganizador = HibernateUtil.getCurrentSession()
+                .createQuery("SELECT e FROM Evento e WHERE e.organizador = :organizador", Evento.class)
+                .setParameter("organizador", organizador)
+                .getResultList();
 
+        // Filtrar los eventos del organizador
         eventos.removeAll(eventosOrganizador);
         return eventos;
     }
@@ -220,9 +222,19 @@ public class Modelo {
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 
-    public void desinscribirse(Inscripcion inscripcionADesinscibir) {
+    public void desapuntarUsuario(Evento eventoDesinscribir, Usuario usuarioDesinscribir) {
         HibernateUtil.getCurrentSession().beginTransaction();
-        HibernateUtil.getCurrentSession().delete(inscripcionADesinscibir);
+        HibernateUtil.getCurrentSession().createQuery("DELETE FROM Inscripcion i WHERE i.evento = :evento AND i.usuario = :usuario")
+                .setParameter("evento", eventoDesinscribir)
+                .setParameter("usuario", usuarioDesinscribir)
+                .executeUpdate();
+        HibernateUtil.getCurrentSession().getTransaction().commit();
+    }
+
+    public void inscribirUsuario(Evento eventoInscribir, Usuario usuarioInscribir, Date fechaInscripcion, String estado) {
+        HibernateUtil.getCurrentSession().beginTransaction();
+        Inscripcion inscripcion = new Inscripcion(fechaInscripcion, estado, eventoInscribir, usuarioInscribir);
+        HibernateUtil.getCurrentSession().saveOrUpdate(inscripcion);
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 }

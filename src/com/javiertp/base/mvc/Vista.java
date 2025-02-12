@@ -8,7 +8,7 @@ import com.javiertp.base.enums.Ubicaciones;
 import javax.swing.*;
 import java.awt.*;
 
-public class Vista {
+public class Vista extends JFrame {
 
     //Inscripción
     JFrame frame;
@@ -23,7 +23,7 @@ public class Vista {
     JButton nuevoUsuarioBtn;
     JButton modificarUsuarioBtn;
     JButton eliminarUsuarioBtn;
-    JButton desinscribirseBtn;
+    JButton desapuntarUsuarioBtn;
 
     //Evento
     JTextField nombreEventoTxt;

@@ -12,8 +12,6 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import static com.javiertp.base.util.HibernateUtil.session;
-
 public class Controlador extends WindowAdapter implements ActionListener, ListSelectionListener {
 
     private final Vista vista;
@@ -86,8 +84,8 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         vista.desinscribirUsuarioBtn.setActionCommand("DesinscribirUsuarioEvento");
         vista.desvincularEventoOrganizadorBtn.addActionListener(listener);
         vista.desvincularEventoOrganizadorBtn.setActionCommand("DesvincularOrganizador");
-        vista.desinscribirseBtn.addActionListener(listener);
-        vista.desinscribirseBtn.setActionCommand("DesinscribirUsuario");
+        vista.desapuntarUsuarioBtn.addActionListener(listener);
+        vista.desapuntarUsuarioBtn.setActionCommand("DesapuntarUsuario");
         vista.inscribirUsuarioEventoBtn.addActionListener(listener);
         vista.inscribirUsuarioEventoBtn.setActionCommand("InscribirUsuario");
         vista.asignarEventoOrganizadorBtn.addActionListener(listener);
@@ -122,20 +120,18 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                             (Organizador) vista.organizadorComboBox.getSelectedItem());
                     modelo.guardarEvento(eventoAInsertar);
                     break;
-
                 case "ModificarEvento":
                     Evento eventoAModificar = vista.listEventos.getSelectedValue();
                     eventoAModificar.setNombre(vista.nombreEventoTxt.getText());
+                    eventoAModificar.setUbicacion(String.valueOf(vista.eventoComboBox.getSelectedItem()));
                     eventoAModificar.setOrganizador((Organizador) vista.organizadorComboBox.getSelectedItem());
                     eventoAModificar.setPrecio(Float.parseFloat(vista.precioEventoTxt.getText()));
                     modelo.modificarEvento(eventoAModificar);
                     break;
-
                 case "EliminarEvento":
                     Evento eventoEliminar = vista.listEventos.getSelectedValue();
                     modelo.eliminarEvento(eventoEliminar);
                     break;
-
                 case "NuevoUsuario":
                     Usuario usuarioAinsertar = new Usuario(vista.nombreUsuarioTxt.getText(), vista.apellidosUsuarioTxt.getText(),
                             vista.emailUsuarioTxt.getText(), Date.valueOf(vista.usuarioDPicker.getDate()));
@@ -146,7 +142,6 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                         return;
                     }
                     break;
-
                 case "ModificarUsuario":
                     Usuario usuarioAModificar = vista.listUsuarios.getSelectedValue();
                     usuarioAModificar.setNombre(vista.nombreUsuarioTxt.getText());
@@ -154,18 +149,20 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                     usuarioAModificar.setEmail(vista.emailUsuarioTxt.getText());
                     modelo.modificarUsuario(usuarioAModificar);
                     break;
-
                 case "EliminarUsuario":
                     Usuario usuarioEliminar = vista.listUsuarios.getSelectedValue();
                     modelo.eliminarUsuario(usuarioEliminar);
                     break;
-
                 case "NuevoOrganizador":
                     Organizador organizadorAInsertar = new Organizador(vista.nombreOrganizadorTxt.getText(), vista.apellidosOrganizadorTxt.getText(),
                             vista.telefonoOrganizadorTxt.getText(), vista.emailOrganizadorTxt.getText());
-                    modelo.guardarOrganizador(organizadorAInsertar);
+                    try {
+                        modelo.guardarOrganizador(organizadorAInsertar);
+                    } catch (Exception e) {
+                        Util.showErrorAlert("El email introducido ya existe");
+                        return;
+                    }
                     break;
-
                 case "ModificarOrganizador":
                     Organizador organizadorAModificar = vista.listOrganizadores.getSelectedValue();
                     organizadorAModificar.setNombre(vista.nombreOrganizadorTxt.getText());
@@ -174,13 +171,11 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                     organizadorAModificar.setEmail(vista.emailOrganizadorTxt.getText());
                     modelo.modificarOrganizador(organizadorAModificar);
                     break;
-
                 case "EliminarOrganizador":
                     Organizador organizadorEliminar = vista.listOrganizadores.getSelectedValue();
                     organizadorEliminar.desvincularEventos();
                     modelo.eliminarOrganizador(organizadorEliminar);
                     break;
-
                 case "NuevaInscripcion":
                     Inscripcion inscripcionAInsertar = new Inscripcion(Date.valueOf(vista.inscripcionDPicker.getDate()),
                             vista.estadoComboBox.getSelectedItem().toString(),
@@ -188,7 +183,6 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                             (Usuario) vista.usuarioInscripcionComboBox.getSelectedItem());
                     modelo.guardarInscripcion(inscripcionAInsertar);
                     break;
-
                 case "ModificarInscripcion":
                     Inscripcion inscripcionAModificar = vista.listInscripciones.getSelectedValue();
                     inscripcionAModificar.setEstado(vista.estadoComboBox.getSelectedItem().toString());
@@ -196,12 +190,10 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                     inscripcionAModificar.setUsuario((Usuario) vista.usuarioInscripcionComboBox.getSelectedItem());
                     modelo.modificarInscripcion(inscripcionAModificar);
                     break;
-
                 case "EliminarInscripcion":
                     Inscripcion inscripcionEliminar = vista.listInscripciones.getSelectedValue();
                     modelo.eliminarInscripcion(inscripcionEliminar);
                     break;
-
                 case "NuevaValoracion":
                     int puntuacion = Integer.parseInt(vista.puntuacionValoracionTxt.getText());
 
@@ -218,8 +210,13 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                     );
                     modelo.guardarValoracion(valoracionAInsertar);
                     break;
-
                 case "ModificarValoracion":
+                    int puntuacion2 = Integer.parseInt(vista.puntuacionValoracionTxt.getText());
+
+                    if (puntuacion2 < 1 || puntuacion2 > 5) {
+                        Util.showErrorAlert("La puntuacion debe estar entre 1 y 5");
+                        return;
+                    }
                     Valoracion valoracionAModificar = vista.listValoraciones.getSelectedValue();
                     valoracionAModificar.setUsuario((Usuario) vista.usuarioValoracionCombo.getSelectedItem());
                     valoracionAModificar.setEvento((Evento) vista.eventoValoracionCombo.getSelectedItem());
@@ -228,29 +225,26 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                     valoracionAModificar.setComentario(vista.comentarioValoracionTxt.getText());
                     modelo.modificarValoracion(valoracionAModificar);
                     break;
-
                 case "EliminarValoracion":
                     Valoracion valoracionAEliminar = vista.listValoraciones.getSelectedValue();
                     modelo.eliminarValoracion(valoracionAEliminar);
                     break;
-                case "DesinscribirUsuario":
+                case "DesapuntarUsuario":
                     Usuario usuarioDesinscribir = vista.listUsuarios.getSelectedValue();
                     Evento eventoDesinscribir = vista.listInscripcionesUsuario.getSelectedValue();
-                    Inscripcion inscripcionADesinscibir = eventoDesinscribir.getInscripcion(usuarioDesinscribir);
-                    modelo.eliminarInscripcion(inscripcionADesinscibir);
+                    modelo.desapuntarUsuario(eventoDesinscribir, usuarioDesinscribir);
                     break;
                 case "InscribirUsuario":
                     Usuario usuarioInscribir = vista.listUsuariosDisponiblesPorEvento.getSelectedValue();
                     Evento eventoInscribir = vista.listEventos.getSelectedValue();
-                    Inscripcion inscripcionAInscribir = new Inscripcion(Date.valueOf(LocalDate.now()),
-                            "Pendiente", eventoInscribir, usuarioInscribir);
-                    modelo.guardarInscripcion(inscripcionAInscribir);
+                    Date fechaInscripcion = Date.valueOf(LocalDate.now());
+                    String estado = "Pendiente";
+                    modelo.inscribirUsuario(eventoInscribir, usuarioInscribir, fechaInscripcion, estado);
                     break;
                 case "DesinscribirUsuarioEvento":
                     Usuario usuarioDesinscribirEvento = vista.listUsuariosEvento.getSelectedValue();
                     Evento eventoDesinscribirEvento = vista.listEventos.getSelectedValue();
-                    Inscripcion inscripcionADesinscibirEvento = eventoDesinscribirEvento.getInscripcion(usuarioDesinscribirEvento);
-                    modelo.eliminarInscripcion(inscripcionADesinscibirEvento);
+                    modelo.desapuntarUsuario(eventoDesinscribirEvento, usuarioDesinscribirEvento);
                     break;
                 case "DesvincularOrganizador":
                     Evento eventoDesvincular = vista.listEventosOrganizador.getSelectedValue();
@@ -265,14 +259,12 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                     vista.conexionItem.setEnabled(false);
                     modelo.conectar();
                     break;
-
                 case "Salir":
                     int resp = Util.showConfirmDialog("¿Desea salir de la aplicación?", "Salir");
                     if (resp == JOptionPane.OK_OPTION) {
                         System.exit(0);
                     }
                     return;
-
                 default:
                     break;
             }
@@ -306,7 +298,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
     }
 
     private void listarEventosPorOrganizador(Organizador organizador){
-        List<Evento> eventos = organizador.getEventos();
+        List<Evento> eventos = modelo.obtenerEventosPorOrganizador(organizador);
         vista.dlmEventosOrganizador.clear();
         for(Evento evento : eventos){
             vista.dlmEventosOrganizador.addElement(evento);
@@ -449,7 +441,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
     }
 
     private void clearDLMOrganizador() {
-        vista.dlmUsuariosDisponiblesPorEvento.clear();
+        vista.dlmEventosOrganizador.clear();
         vista.dlmEventosDisponiblesOrganizador.clear();
     }
 
@@ -553,5 +545,4 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         vista.dlmEventosUsuario.clear();
         vista.dlmUsuariosDisponiblesPorEvento.clear();
     }
-
 }
